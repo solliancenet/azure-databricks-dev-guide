@@ -70,7 +70,7 @@ Description
 
 ## On-premises connectivity
 
-## [User management](./user-management/README.md)
+# [User management](./user-management/README.md)
 
 # [Data sources](./data-sources/README.md)
 
