@@ -141,10 +141,79 @@ df = spark.read.parquet("wasbs://<your-container-name>@<your-storage-account-nam
 
 ## Integrations
 
+Microsoft has worked closely with Databricks to integrate many features of the Azure platform, such as Azure Storage, Azure Data Lake Store, Power BI, Azure Active Directory, Azure Data Factory, Azure SQL Data Warehouse, Azure SQL Database, and Azure Cosmos DB. These integrations make it simple for you, as a developer, to build end-to-end data architectures on Azure.
+
+Aside from Azure integrations, Azure Databricks provides a number of other supported [data sources](https://docs.azuredatabricks.net/spark/latest/data-sources/index.html):
+
+- Couchbase
+- ElasticSearch
+- Importing Hive Tables
+- Neo4j
+- Avro Files
+- CSV Files
+- JSON Files
+- LZO Compressed Files
+- Parquet Files
+- Redis
+- Riak Time Series
+- Zip Files
+
 ## Workspace
 
 One of the core strengths of Azure Databricks is its approach in creating a collaborative space for teams of people, from data scientists and engineers to data architects. While HDInsight Spark is naturally configured for a single user account, with all work being performed from the context of a single cluster, though domain-joined clusters do allow for more users, Azure Databricks comes with a central workspace. This is the landing place for team members to share notebooks and other artifacts, create folders, clone files, view documentation and release notes, and view other's work. Clusters are created and managed within the workspace, and executed against a common set of data and notebooks. The focus is taken off individual clusters and instead drawn into a collaborative environment that spans cluster lifecycles and emphasizes accessibility of data.
 
 ![Screenshot showing the Workspace and user folders](media/azure-databricks-workspace.png 'Azure Databricks Workspace')
 
-## Tables
+## Databases and Tables
+
+With HDInsight, if you want to persist your structured data across cluster lifecycles, or allow other clusters to gain access to this data, you need to configure an external Hive or Oozie metastore. The metastore holds metadata information for files externally stored. So when you create a DataFrame in Spark from flat files stored in Azure Blob storage, for instance, you can persist the structure within a metastore. When you delete your cluster and recreate it later on, you can access those Hive or Oozie tables from the new cluster by configuring it to attach to the metastore. Or, if you have a Spark HDInsight cluster and a Hive LLAP HDInsight cluster, they can both access the metastore.
+
+Every Azure Databricks deployment has a central Hive metastore accessible by all clusters to persist table metadata. There is no additional configuration needed. However, you do have the option to use your existing external Hive metastore instance. In fact, you can even [use the Hive metastore of an HDInsight cluster](https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-use-external-metadata-stores) as an external metastore in Azure Databricks. This allows you to share metastores with HDInsight clusters, such as Hive LLAP, to use the same metadata for different workloads.
+
+The Azure Databricks Hive metastore is simply called a _table_. Tables are contained within a database, which is associated with a cluster.
+
+![Screenshot showing the Data section of the workspace, displaying a database and tables within](media/azure-databricks-tables.png 'Azure Databricks Tables')
+
+You can view the databases and tables by selecting the **Data** menu option. You must have at least one cluster to view databases. The screenshot above shows a number of tables that have either been created through the UI, using the Create New Table option you see to the right, or have been programmatically created from a DataFrame.
+
+There are two different types of tables in Azure Databricks: **local** and **global**. A global table is available across all clusters, and are displayed within a database as shown here. A local table, on the other hand, is not accessible from other clusters and is not registered in the Hive metastore. This is also known as a _temporary table_ or a _view_.
+
+Here is an example of creating a new table with the UI:
+
+![Creating a new table with the UI](media/azure-databricks-create-new-table-ui.png 'Create new table - UI')
+
+This example demonstrates using the Upload File option.
+
+When you select the _Create Table with UI_ button, you select which cluster to use for the preview, then you can specify parameters for creating the table, including the name, file type, and data types:
+
+![Previewing the table with UI and specifying parameters](media/preview_new_table_ui.png 'Preview new table - UI')
+
+You can programmatically create global tables from a DataFrame in Scala or Python:
+
+```python
+dataFrame.write.saveAsTable("<table-name>")
+```
+
+or with SQL syntax:
+
+```sql
+CREATE TABLE tableName ...
+```
+
+Local tables are created with the `createOrReplaceTempView` command: `dataFrame.createOrReplaceTempView("<table-name>")`.
+
+These are examples of creating _managed_ tables. This means that the Spark SQL table has metadata information that stores the schema and the data itself. The word managed is used because Spark SQL manages both the data and the metadata. If you drop a managed table, the data is deleted along with its metadata.
+
+This differs from how Spark on HDInsight works with external metastores (Hive tables). Only the metadata is stored, and the metadata includes a pointer to the data's location. In Azure Databricks, this is referred to as an _unmanaged table_. Spark SQL manages the metadata, but you specify the data location.
+
+Here's how you can programmatically create unmanaged tables from a DataFrame in Scala or Python:
+
+```python
+dataframe.write.option('path', '<your-storage-path>').saveAsTable('<example-table>')
+```
+
+or with SQL syntax:
+
+```sql
+CREATE TABLE <example-table>(id STRING, value STRING) USING org.apache.spark.sql.parquet OPTIONS (path '<your-storage-path>')
+```
