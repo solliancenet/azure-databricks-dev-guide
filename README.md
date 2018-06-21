@@ -4,7 +4,7 @@ Description
 
 # [What is Azure Databricks?](./overview/README.md)
 
-## Comparing Azure Databricks to HDInsight Spark
+## [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
 
 # [Core Scenarios](./core-scenarios/README.md)
 
