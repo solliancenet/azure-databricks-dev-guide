@@ -42,7 +42,9 @@ The final step is a summary where you confirm your settings.
 
   ![Screenshot showing the form to create a new Azure Databricks Service](media/provision-databricks-service.png 'Provision Azure Databricks service')
 
-  The first step is to create the Azure Databricks service. This creates the resources required to host the Azure Databricks Workspace. Here we selected the Premium pricing tier so we can use role-based access controls (RBAC), and a few other features like a JDBC connection string that can be used to connect to one of the clusters within the Workspace from external tools, like Power BI. Notice that both pricing tiers are already secured with Azure Active Directory, with no additional configuration required. This is much simpler than creating a secure domain-joined (enterprise) HDInsight cluster, which you then manage using Ranger and Kerberos.
+  The first step is to create the Azure Databricks service. This creates the resources required to host the Azure Databricks Workspace, such as a VNet, a security group, and a storage account. There is no need to specify these resources as you do with Spark on HDInsight.
+
+  Here we selected the Premium pricing tier so we can use role-based access controls (RBAC), and a few other features like a JDBC connection string that can be used to connect to one of the clusters within the Workspace from external tools, like Power BI. Notice that both pricing tiers are already secured with Azure Active Directory, with no additional configuration required. This is much simpler than creating a secure domain-joined (enterprise) HDInsight cluster, which you then manage using Ranger and Kerberos.
 
 - **Step 2: Create a cluster**
 
@@ -103,3 +105,46 @@ Input widgets make it incredibly simple to add parameters to your notebooks and 
 Databricks notebooks store a history of changes to your notebook. You can select an item to view the notebook at that point in time. By default, this history is kept in local storage, but when you link a Git provider like GitHub or BitBucket to a notebook, the revision history will display the commit history within the linked repository. This history list is synchronized each time you re-open the History panel. You can choose to restore a given revision directly from the panel.
 
 ![Screenshot of the History panel with GitHub commits and an option to restore a specific revision](media/revision-history-panel.png 'History panel')
+
+### Visualizations
+
+Databricks supports a number of visualizations out of the box. All notebooks, regardless of their language, support Databricks visualization using the `display` function. The display function includes support for visualizing multiple data types. As opposed to the handful of basic visualizations that other notebook engines provide, Azure Databricks includes several out of the box that you traditionally would need to rely on an external library such as `matplotlib` to obtain. However, if you wish to use external libraries to augment the default ones, you are free to do so.
+
+![](media/azure-databricks-visualizations.png)
+
+## File system
+
+Azure Databricks uses the Databricks File System (DBFS) to accelerate access to files stored in Azure Blob storage. This distributed files system is automatically installed on Databricks Runtime clusters, and provides caching and optimized analysis over existing data. Any time you store data to DBFS, it is saved to the Azure Blob storage account that was automatically provisioned when you created the service in Azure.
+
+Use the `dbutils` utility to work with files within DBFS as if you would from a local filesystem. You can either execute commands against `dbutils` directly:
+
+`dbutils.fs.mkdirs("/newdir/")`
+
+or by using the `%fs` magic for shorthand:
+
+`%fs mkdirs "/newdir2/"`
+
+If you would like to provide all users within your Azure Databricks workspace access to an Azure Blob storage container, you can mount it using the `dbutils.fs.mount` [command](https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-storage.html#mount-an-azure-blob-storage-container).
+
+Files are accessed by using either the `/mnt/` prefix or `dbfs:/`, both followed by the mount name specified in the `dbutils.fs.mount` command:
+
+```python
+df = spark.read.text("/mnt/%s/...." % <mount-name>)
+df = spark.read.text("dbfs:/<mount-name>/...")
+```
+
+Spark on HDInsight uses the Hadoop Distributed File System (HDFS) to access files in Azure Blob storage. You can do the same within Azure Databricks by using the HDFS API. If you are accessing a public storage account, you do not need to configure anything. However, if you want to access a private storage account, you must configure access with the `spark.conf.set` [command](https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-storage.html#access-azure-blob-storage-using-the-hdfs-api). Once access has been configured (in the case of private storage accounts), you can use standard Spark and Databricks APIs to read from the storage account. Note that the Azure Blob storage access path begins with `wasbs://`:
+
+```python
+df = spark.read.parquet("wasbs://<your-container-name>@<your-storage-account-name>.blob.core.windows.net/<your-directory-name>")
+```
+
+## Integrations
+
+## Workspace
+
+One of the core strengths of Azure Databricks is its approach in creating a collaborative space for teams of people, from data scientists and engineers to data architects. While HDInsight Spark is naturally configured for a single user account, with all work being performed from the context of a single cluster, though domain-joined clusters do allow for more users, Azure Databricks comes with a central workspace. This is the landing place for team members to share notebooks and other artifacts, create folders, clone files, view documentation and release notes, and view other's work. Clusters are created and managed within the workspace, and executed against a common set of data and notebooks. The focus is taken off individual clusters and instead drawn into a collaborative environment that spans cluster lifecycles and emphasizes accessibility of data.
+
+![Screenshot showing the Workspace and user folders](media/azure-databricks-workspace.png 'Azure Databricks Workspace')
+
+## Tables
