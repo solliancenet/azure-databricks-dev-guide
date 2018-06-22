@@ -16,7 +16,7 @@ Description
 
 # [Azure Databricks architecture](./architecture/README.md)
 
-# [The Azure Databricks workspace](./workspace/README.md)
+# [The Azure Databricks workspace](./workspace/workspace-overview.md)
 
 # [Configuring the cluster](./configuration/README.md)
 

@@ -1,1 +1,0 @@
-# The Azure Databricks workspace

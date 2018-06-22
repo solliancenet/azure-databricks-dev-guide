@@ -38,11 +38,11 @@ The final step is a summary where you confirm your settings.
 
 ### Steps to provision an Azure Databricks Workspace and cluster
 
-- **Step 1: Create Azure Databricks service**
+- **Step 1: Create Azure Databricks workspace**
 
   ![Screenshot showing the form to create a new Azure Databricks Service](media/provision-databricks-service.png 'Provision Azure Databricks service')
 
-  The first step is to create the Azure Databricks service. This creates the resources required to host the Azure Databricks Workspace, such as a VNet, a security group, and a storage account. There is no need to specify these resources as you do with Spark on HDInsight.
+  The first step is to create the Azure Databricks workspace. This creates the resources required to host the Azure Databricks Workspace, such as a VNet, a security group, and a storage account. There is no need to specify these resources as you do with Spark on HDInsight.
 
   Here we selected the Premium pricing tier so we can use role-based access controls (RBAC), and a few other features like a JDBC connection string that can be used to connect to one of the clusters within the Workspace from external tools, like Power BI. Notice that both pricing tiers are already secured with Azure Active Directory, with no additional configuration required. This is much simpler than creating a secure domain-joined (enterprise) HDInsight cluster, which you then manage using Ranger and Kerberos.
 
@@ -160,7 +160,7 @@ Aside from Azure integrations, Azure Databricks provides a number of other suppo
 
 ## Workspace
 
-One of the core strengths of Azure Databricks is its approach in creating a collaborative space for teams of people, from data scientists and engineers to data architects. While HDInsight Spark is naturally configured for a single user account, with all work being performed from the context of a single cluster, though domain-joined clusters do allow for more users, Azure Databricks comes with a central workspace. This is the landing place for team members to share notebooks and other artifacts, create folders, clone files, view documentation and release notes, and view other's work. Clusters are created and managed within the workspace, and executed against a common set of data and notebooks. The focus is taken off individual clusters and instead drawn into a collaborative environment that spans cluster lifecycles and emphasizes accessibility of data.
+One of the core strengths of Azure Databricks is its approach in creating a collaborative space for teams of people, from data scientists and engineers to data architects. While HDInsight Spark is naturally configured for a single user account, with all work being performed from the context of a single cluster, though domain-joined clusters do allow for more users, Azure Databricks comes with a [central workspace](../workspace/workspace-overview.md). This is the landing place for team members to create and share notebooks, libraries, and dashboards, create folders, clone files, view documentation and release notes, and view other's work. Each user has their own private home folder that isn't shared. Clusters are created and managed within the workspace, and executed against a common set of data and notebooks. The focus is taken off individual clusters and instead drawn into a collaborative environment that spans cluster lifecycles and emphasizes accessibility of data.
 
 ![Screenshot showing the Workspace and user folders](media/azure-databricks-workspace.png 'Azure Databricks Workspace')
 
