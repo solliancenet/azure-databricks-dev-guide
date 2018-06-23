@@ -83,3 +83,5 @@ One item of note is, if you remove a user, the user folder is _not deleted_.
 ## Managing your workspace programmatically
 
 The UI for the Workspace is very straightforward and easy to work with. But what if you want to script out certain tasks? For instance, you would like to manipulate the folder structure or import or export a collection of notebooks in one shot? The good news is that Workspace actions such as these can be performed programmatically through the [Databricks CLI](https://docs.azuredatabricks.net/user-guide/dev-tools/databricks-cli.html#databricks-cli) and [Workspace API](https://docs.azuredatabricks.net/api/latest/workspace.html#workspace-api).
+
+<!-- TODO: Show code samples here -->
