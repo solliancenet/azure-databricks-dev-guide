@@ -24,7 +24,7 @@ Description
 
 # [Notebooks](./notebooks/README.md)
 
-# [Business intelligence and data visualization](./business-intelligence-datavis/README.md)
+# [Business intelligence and data visualization](./business-intelligence-datavis/overview.md)
 
 # [Jobs](./jobs/README.md)
 
