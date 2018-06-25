@@ -22,7 +22,7 @@ Description
 
 # [Monitoring & managing the cluster](./monitoring-managing/README.md)
 
-# [Notebooks](./notebooks/README.md)
+# [Notebooks](./notebooks/notebooks-overview.md)
 
 # [Business intelligence and data visualization](./business-intelligence-datavis/bi-and-datavis.md)
 
@@ -72,7 +72,7 @@ Description
 
 # [User management](./user-management/README.md)
 
-# [Data sources](./data-sources/README.md)
+# [Data sources](./data-sources/data-sources-overview.md)
 
 # [Solution-oriented scenario guidance](./solution-oriented-scenarios/README.md)
 
