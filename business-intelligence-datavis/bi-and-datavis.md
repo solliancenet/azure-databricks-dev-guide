@@ -359,3 +359,7 @@ Before you begin, you must first obtain the JDBC connection string to your Azure
 1.  You can save the report, by clicking Save from the File menu, and entering a name and location for the file.
 
 1.  Once this report is saved, you can import it into the Power BI online service, so others can access the data and the reports can be embedded elsewhere.
+
+## Using other BI tools
+
+This guide walked you through using Azure Databricks dashboards and Power BI as business intelligence tools. Refer to the Azure Databricks documentation to learn how to [use other business intelligence tools](https://docs.azuredatabricks.net/user-guide/bi/index.html), such as Tableau, Alteryx, Datadog, Looker, and SQL Workbench/J.
