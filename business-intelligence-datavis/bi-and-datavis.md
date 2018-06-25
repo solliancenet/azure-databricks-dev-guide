@@ -4,7 +4,7 @@ The Apache Spark engine, the underlying platform for Azure Databricks, helps you
 
 ## What is business intelligence, and why should I care?
 
-Business intelligence, oftentimes referred to as BI, is simply a process for collecting and analyzing data with the goal of extracting actionable insights from that data. These insights help inform business decisions that are backed by analysis of data that is most often represented by visualizations.
+Business intelligence, oftentimes referred to as BI, is simply a process for collecting and analyzing data with the goal of extracting actionable insights from those data. These insights help inform business decisions that are backed by analysis of data that is most often represented by visualizations.
 
 ## What are data visualizations in this context?
 
@@ -59,7 +59,7 @@ This map visualization is one of the default options that come with Azure Databr
 
 ![](../overview/media/azure-databricks-visualizations.png)
 
-These visualizations are suitable for many situations, but sometimes you need to pull in a 3rd-party library or package. Here's an example of referencing the `d3a` package. You can find out more about using 3rd-party and custom packages in [Creating and Using 3rd-party and Local Libraries](../libraries/README.md). This example also uses the 3rd-party `graphframes` package to provide DataFrame-based graphs.
+These visualizations are suitable for many situations, but sometimes you need to pull in a 3rd-party library or package. Here's an example of referencing the `d3a` package. You can find out more about using 3rd-party and custom packages in [Creating and Using 3rd-party and Local Libraries](../libraries/third-party-and-local-libraries.md). This example also uses the 3rd-party `graphframes` package to provide DataFrame-based graphs.
 
 ```javascript
 // On-time and Early Arrivals
@@ -76,6 +76,137 @@ The output of the code above is an interactive visualization displayed right in 
 ![Screenshot of an interactive map displaying the relationships between origin and destination airports, using the d3a package](media/d3a-interactive-map.png 'Interactive d3a map')
 
 ## Business intelligence and Azure Databricks
+
+Azure Databricks gives you the ability to create [dashboards](https://docs.azuredatabricks.net/user-guide/notebooks/dashboards.html#dashboards) that make it easy to publish your visualizations into a presentation format. This capability allows you to hide the underlying code so viewers can just focus on the visualizations and labeled data.
+
+For our example, we will continue using the IRS Tax Statistics dataset that we used above. You can follow along, because the files are already available via the `/databricks-datasets` directory which is a repository of public, Azure Databricks-hosted datasets that is available on all Azure Databricks accounts.
+
+1.  First, create a new Scala notebook in the Azure Databricks dashboard.
+
+1.  In the first cell, add the following code snippet to display a title using markdown format:
+
+    ```
+    %md # Income Tax Analysis Dashboard
+    ```
+
+1.  In the next cell, create a new DataFrame with the tax data you will use for the dashboard.
+
+    ```javascript
+    val taxes2013 = spark
+      .read.format("csv")
+      .option("header", "true")
+      .load("dbfs:/databricks-datasets/data.gov/irs_zip_code_data/data-001/2013_soi_zipcode_agi.csv")
+    ```
+
+1.  In a new cell, create a temporary table from the DataFrame:
+
+    ```javascript
+    taxes2013.createOrReplaceTempView('taxes2013');
+    ```
+
+1.  If you look at the contents of the data, you will notice that it contains a large number of columns, many of which have unfamiliar names. For the purposes of the dashboard, select a subset of the columns into a new table, and shorten the zip code length from 5 to 4 to widen the general area you will display from your data set:
+
+    ```sql
+    %sql
+    DROP TABLE IF EXISTS cleaned_taxes;
+
+    CREATE TABLE cleaned_taxes AS
+    SELECT state, int(zipcode / 10) as zipcode,
+      int(mars1) as single_returns,
+      int(mars2) as joint_returns,
+      int(numdep) as numdep,
+      double(A02650) as total_income_amount,
+      double(A00300) as taxable_interest_amount,
+      double(a01000) as net_capital_gains,
+      double(a00900) as biz_net_income
+    FROM taxes2013
+    ```
+
+1.  Paste the following markdown into a new cell as a sub-header for the diagram that follows:
+
+    ```
+    %md ## Average income tax by state
+    ```
+
+1.  Now create a new DataFrame from the new table, and change the display visualization to "Map":
+
+    ```javascript
+    val cleanedTaxes = spark.table("cleaned_taxes")
+    display(cleanedTaxes.groupBy("state").avg("total_income_amount"))
+    ```
+
+    Your output should look as follows:
+
+    ![Screenshot of the map visualization](media/dashboard-map-vis.png 'Dashboard map visualization')
+
+    Select **Plot options...** and make sure it is configured as follows:
+
+    ![Custom plot settings](media/dashboard-map-vis-settings.png 'Customize Plot')
+
+1.  Paste the following markdown into a new cell as a sub-header for the diagram that follows:
+
+    ```
+    %md ## Zip codes with lowest total capital gains
+    ```
+
+1.  To display the set of zip codes with the lowest total capital gains, enter the following in a new cell and change the visualization to the Bar chart:
+
+    ```sql
+    %sql
+    SELECT zipcode, SUM(net_capital_gains) AS cap_gains
+    FROM cleaned_taxes
+      WHERE NOT (zipcode = 0000 OR zipcode = 9999)
+    GROUP BY zipcode
+    ORDER BY cap_gains ASC
+    LIMIT 10
+    ```
+
+    Your output should look as follows:
+
+    ![Screenshot of the chart visualization](media/dashboard-chart-vis.png 'Dashboard chart visualization')
+
+1.  Paste the following markdown into a new cell as a sub-header for the diagram that follows:
+
+    ```
+    %md ## Total capital gains and business net income by zip code
+    ```
+
+1.  Finally, create a combo metric that represents the total capital gains and business net income by zip code. This is weighted very strongly by capital gains as we can see in the plot:
+
+    ```sql
+    %sql
+    SELECT zipcode,
+      SUM(biz_net_income) as business_net_income,
+      SUM(net_capital_gains) as capital_gains,
+      SUM(net_capital_gains) + SUM(biz_net_income) as capital_and_business_income
+    FROM cleaned_taxes
+      WHERE NOT (zipcode = 0000 OR zipcode = 9999)
+    GROUP BY zipcode
+    ORDER BY capital_and_business_income DESC
+    LIMIT 50
+    ```
+
+    Change the visualization to the Bar chart and set the following plot options:
+
+    ![Screenshot showing the plot options for the bar chart](media/dashboard-combo-bar-chart-options.png 'Customize Plot')
+
+    The outcome should look similar to the following:
+
+    ![Screenshot showing the resulting bar chart](media/dashboard-combo-bar-chart.png 'Bar chart')
+
+1.  To create your dashboard, select **View** from the top menu, then **+ New Dashboard**.
+
+    ![Select View on top of the page, then select New Dashboard](media/dashboard-new-dashboard-button.png 'New Dashboard button')
+
+1.  A settings pane for the dashboard will slide out from the right. Type a name for the dashboard, set the width and layout options, the select **Present Dashboard**.
+
+    ![Supply a name for the dashboard, select the width and layout, then select Present Dashboard](media/dashboard-new-dashboard-pane.png 'New Dashboard pane')
+
+1.  Presentation mode displays your dashboard in a full window view. The charts are still interactive, in that you can hover over their elements to view data labels and other information. You now have a business intelligence dashboard with great visualizations of your data!
+
+    ![Dashboard in presentation mode](media/dashboard-in-presentation-mode.png 'Dashboard')
+
+## Using external BI tools and services with Azure Databricks
 
 While Azure Databricks is built for collaboration, making it easy for data scientists, engineers, architects, and developers to share and work with data, there are times when you need to go outside the environment to give access to others to your data. A good example of this is business leaders who want to view an executive summary, or perhaps business analysts who want to create ad-hoc reports but do not have the ability or desire to write code. In other cases, you want visualizations that you can embed in a web page that automatically refreshes as new data becomes available. In all of these cases, an external BI system makes a lot of sense. One option is to use [Power BI](https://powerbi.microsoft.com), Microsoft's premier suite of business analytics tools. With it, you can create individual reports from datasets that draw from Azure Databricks' tables, and static or live (auto-refreshes data) dashboards, all of which can be consumed on the web or across mobile devices. Users can create their own personalized dashboards, and you can embed any dashboard or report into a web application of your choosing.
 
@@ -228,3 +359,7 @@ Before you begin, you must first obtain the JDBC connection string to your Azure
 1.  You can save the report, by clicking Save from the File menu, and entering a name and location for the file.
 
 1.  Once this report is saved, you can import it into the Power BI online service, so others can access the data and the reports can be embedded elsewhere.
+
+## Using other BI tools
+
+This guide walked you through using Azure Databricks dashboards and Power BI as business intelligence tools. Refer to the Azure Databricks documentation to learn how to [use other business intelligence tools](https://docs.azuredatabricks.net/user-guide/bi/index.html), such as Tableau, Alteryx, Datadog, Looker, and SQL Workbench/J.
