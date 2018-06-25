@@ -143,11 +143,11 @@ When creating a cluster, you can either provide a fixed number of workers for th
 
 When you provide a fixed size cluster, Azure Databricks ensures that your cluster has the specified number of workers. When you provide a range for the number of workers, Databricks chooses the appropriate number of workers required to run your job.
 
-Fixed size:
+**Fixed size:**
 
 ![Only one textbox for selecting number of workers when fixed size](media/fixed-size-cluster.png 'Fixed size cluster')
 
-Variable size (autoscaling enabled):
+**Variable size (autoscaling enabled):**
 
 ![Min and max textboxes displayed when autoscaling is enabled](media/autoscaling.png 'Variable sie cluster - autoscaling enabled')
 
@@ -172,7 +172,7 @@ Refer to the [Cluster Size and Autoscaling](https://docs.azuredatabricks.net/use
 
 To save cluster resources, you can terminate a cluster either manually, or have it automatically terminated with this option. A terminated cluster cannot run notebooks or jobs, but its configuration is stored so that it can be reused at a later time.
 
-**Note: ** Azure Databricks retains the configuration information for up to 70 interactive clusters terminated in the last 30 days and up to 30 job clusters recently terminated by the job scheduler. To keep an interactive cluster configuration even after it has been terminated for more than 30 days, an administrator can [pin](https://docs.azuredatabricks.net/user-guide/clusters/pin.html#cluster-pin) a cluster to the cluster list.
+**Note:** Azure Databricks retains the configuration information for up to 70 interactive clusters terminated in the last 30 days and up to 30 job clusters recently terminated by the job scheduler. To keep an interactive cluster configuration even after it has been terminated for more than 30 days, an administrator can [pin](https://docs.azuredatabricks.net/user-guide/clusters/pin.html#cluster-pin) a cluster to the cluster list.
 
 You can configure your cluster to automatically terminate after a period of inactivity by checking the **Terminate after** checkbox and specifying the number of minutes of inactivity:
 
