@@ -2,7 +2,7 @@
 
 Description
 
-# [What is Azure Databricks?](./overview/README.md)
+# [What is Azure Databricks?](./overview/azure-databricks-dev-guide-intro.md)
 
 ## [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
 
@@ -14,7 +14,7 @@ Description
 
 ## Real-time streaming
 
-# [Azure Databricks architecture](./architecture/README.md)
+# [Azure Databricks architecture](./architecture/azure-databricks-architecture.md)
 
 # [The Azure Databricks workspace](./workspace/workspace-overview.md)
 
@@ -42,9 +42,9 @@ Description
 
 ## CLI
 
-## Azure Data Factory
+## Azure Data Factory (./automation-orchestration/azure-data-factory.md)
 
-## Apache Airflow
+## Apache Airflow (./automation-orchestration/apache-airflow.md)
 
 # [Creating and using 3rd-party and local libraries](./libraries/README.md)
 
