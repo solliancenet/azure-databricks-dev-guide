@@ -48,7 +48,7 @@ Description
 
 # [Creating and using 3rd-party and local libraries](./libraries/third-party-and-local-libraries.md)
 
-# [Developing Spark apps](./spark-apps/README.md)
+# [Developing Spark apps](./spark-apps/developing-spark-apps.md)
 
 # [Developing Spark structured streaming apps](./structured-streaming/README.md)
 
