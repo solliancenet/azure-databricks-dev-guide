@@ -155,7 +155,7 @@ Now that you have a notebook, let's add some basic configuration cells to the no
     year = dbutils.widgets.get("year")
     ```
 
-### Load airplane data from DBDS
+### Load airplane data from DBFS
 
 In the step below, you will add code to cells to ingest the airplane data from a CSV file, and perform some data munging to clean up the dataset.
 
@@ -205,7 +205,7 @@ In the step below, you will add code to cells to ingest the airplane data from a
     planes.write.mode("overwrite").saveAsTable("planes")
     ```
 
-### Load flight data from DBDS
+### Load flight data from DBFS
 
 Next, you will add code to ingest the fight data, and perform some data wrangling, similar to what you did above on the airplane data. The flight data includes multiple data files, one for each year, so the code below will make use of the `year` variable populated by the input widget. This code will allow you to request a single year, or pass in an asterisk (*) to retrieve all available years.
 
