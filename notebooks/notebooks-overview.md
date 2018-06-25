@@ -174,6 +174,12 @@ Changes to Azure Databricks notebooks are maintained in a Revision history. This
 
 ![The Revision history if a notebook is displayed.](media/azure-databricks-notebook-revision-history.png "Notebook revision history")
 
+### Git integration
+
+Databricks also supposed version control integration with either GitHub or Bitbucket Cloud. To connect to your account, select User Settings from the Account icon menu, and select Git Integration. More info can be found at [GitHub Version Control](https://docs.azuredatabricks.net/user-guide/notebooks/github-version-control.html) and [Bitbucket Cloud Version Control](https://docs.azuredatabricks.net/user-guide/notebooks/bitbucket-cloud-version-control.html)
+
+![The Git Integration screen from the Azure Databricks User Settings menu is displayed.](media/azure-databricks-user-settings-git-integration.png "Git Integration")
+
 ## Widgets
 
 Parameterization of notebooks is handled through the use of input widgets. Within a notebook, you can create, remove and get bound widget values using the widget API, `dbutils.widgets`. The widget API consists of calls to create different types of input widgets, remove them, and get bound values.
