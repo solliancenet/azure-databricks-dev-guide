@@ -59,7 +59,7 @@ This map visualization is one of the default options that come with Azure Databr
 
 ![](../overview/media/azure-databricks-visualizations.png)
 
-These visualizations are suitable for many situations, but sometimes you need to pull in a 3rd-party library or package. Here's an example of referencing the `d3a` package. You can find out more about using 3rd-party and custom packages in [Creating and Using 3rd-party and Local Libraries](../libraries/README.md). This example also uses the 3rd-party `graphframes` package to provide DataFrame-based graphs.
+These visualizations are suitable for many situations, but sometimes you need to pull in a 3rd-party library or package. Here's an example of referencing the `d3a` package. You can find out more about using 3rd-party and custom packages in [Creating and Using 3rd-party and Local Libraries](../libraries/third-party-and-local-libraries.md). This example also uses the 3rd-party `graphframes` package to provide DataFrame-based graphs.
 
 ```javascript
 // On-time and Early Arrivals
