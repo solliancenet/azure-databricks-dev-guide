@@ -33,7 +33,7 @@ Below is a sample JSON definition of a Databricks Notebook activity:
             "type": "LinkedServiceReference"
         },
         "typeProperties": {
-            "notebookPath": "/Users/user@example.com/Databricks-ADF-demo",
+            "notebookPath": "/adf/Databricks-ADF-demo",
             "baseParameters": {
                 "inputpath": "input/folder1/",
                 "outputpath": "output/"
@@ -114,13 +114,21 @@ print (x)
 
 ## Create a new notebook
 
-The first thing you need to do is create the notebook that will be executed by your ADF Databricks Notebook activity.
+The first thing you need to do is create the notebook that will be executed by your ADF Databricks Notebook activity. To follow best practices for a shared notebook, you will create a folder at the workspace level, named `adf`, and create the notebook within that.
 
-1. In the [Azure portal](https://portal.azure.com), navigate to your Databricks workspace, and on the Azure Databricks page, select **Notebook** under **New**.
+1. In the [Azure portal](https://portal.azure.com), navigate to your Databricks workspace, select **Workspace** from the left-hand menu, then select the Workspace menu down arrow, followed by **Create**, and then select **Folder**.
 
-    ![On the Azure Databricks workspace page, Notebook is highlighted under New.](media/azure-databricks-new-notebook.png "Azure Databricks Workspace")
+    ![The Azure Databricks workspace menu is expanded and Create > Folder is highlighted in the menu.](media/azure-databricks-workspace-create-folder.png "Azure Databricks workspace create folder")
 
-2. Enter a Name, such as Databricks-ADF-demo, on the **Create Notebook** dialog, ensure the language is set to **Python**, select your cluster from the drop down, and then select **Create**.
+2. In the **New Folder Name** dialog, enter **adf** and select **Create**.
+
+    ![The Azure Databricks New Folder Name dialog is displayed, and "adf" is entered into the name field.](media/azure-databricks-workspace-new-folder-name.png "New folder name dialog")
+
+3. Now, select the menu drop down next to the newly created **adf** folder, and then select **Create > Notebook**.
+
+    ![The adf menu is expanded under the Azure Databricks workspace and Create > Notebook is highlighted in the menu.](media/azure-databricks-workspace-create-notebook.png "Azure Databricks workspace create notebook")
+
+4. Enter a Name, such as Databricks-ADF-demo, on the **Create Notebook** dialog, ensure the language is set to **Python**, select your cluster from the drop down, and then select **Create**.
 
     ![Screenshot of the Azure Databricks Create Notebook dialog. A name is entered, and the language is set to Python.](media/azure-databricks-create-notebook.png "Azure Databricks Create Notebook")
 
@@ -347,7 +355,7 @@ With your notebook now in place, you are ready to create the ADF pipeline that w
 
     - **Linked service**: Select the _AzureDatabricks_ linked service you created previously
 
-    - **Notebook path**: Enter the path to the notebook you created above. This will typically be in the format _/Users/[your@email.com]/[Notebook-name]_. For example, if you named your notebook Databricks-ADF-demo, and your Azure email account is user@microsoft.com, the path would be **/Users/user@microsoft.com/Databricks-ADF-demo**.
+    - **Notebook path**: Enter the path to the notebook you created above. Using a shared folder at the workspace level, this will typically be in the format _/folder-name/[Notebook-name]_. For example, if you named your notebook Databricks-ADF-demo, and your shared folder is named adf, the path would be **/adf/Databricks-ADF-demo**.
 
     - Expand **Base Parameters**, select **+ New**, enter **year** for the Name, and enter a four-digit year between 1987 and 2008, or enter "*" to include all years of flight data.
 
@@ -382,7 +390,7 @@ With your notebook now in place, you are ready to create the ADF pipeline that w
                         "secureOutput": false
                     },
                     "typeProperties": {
-                        "notebookPath": "/Users/user@microsoft.net/Databricks-ADF-demo",
+                        "notebookPath": "/adf/Databricks-ADF-demo",
                         "baseParameters": {
                             "year": "*"
                         }
