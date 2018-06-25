@@ -262,6 +262,8 @@ The last cell in your notebook will return a JSON status message to ADF.
     }))
     ```
 
+> **NOTE**: A completed copy of the notebook can be found in this repo at [Databricks-ADF-demo.dbc](./notebooks/Databricks-ADF-demo.dbc) if needed for reference.
+
 ## Create Azure Data Factory pipeline
 
 With your notebook now in place, you are ready to create the ADF pipeline that will call and run the notebook.
