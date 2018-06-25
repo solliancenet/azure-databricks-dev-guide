@@ -399,12 +399,14 @@ dfDelays.groupBy("DepDel15").count().show()
 
 Your output should look similar to the following:
 
+```
 +--------+-------+
 |DepDel15| count|
 +--------+-------+
 | 1| 591608|
 | 0|2267686|
 +--------+-------+
+```
 
 Judging by the delay counts, there are almost four times as many non-delayed records as there are delayed.
 
@@ -418,12 +420,14 @@ trainingSample.groupBy("DepDel15").count().show()
 
 Your new output should look as follows:
 
+```
 +--------+------+
 |DepDel15| count|
 +--------+------+
 | 1|591608|
 | 0|680186|
 +--------+------+
+```
 
 You can see that the number of delayed and not delayed instances are now much closer to each other. This should result in a better-trained model.
 
@@ -597,4 +601,13 @@ Save the model to the local DBFS file store:
 
 ```python
 bestModel.write().overwrite().save("/dbfs/FileStore/models/pipelineModel")
+```
+
+## Summary
+
+If you successfully completed this step-by-step walkthrough of creating a non-trivial Spark application, congratulations! Either way, hopefully you learned something and realize how powerful Databricks notebooks are for creating Spark applications while taking advantage of several languages for their unique strengths. The end result is also a trained model you can import into any other notebook, using the following command:
+
+```python
+# Load the saved pipeline model
+model = PipelineModel.load("/dbfs/FileStore/models/pipelineModel")
 ```
