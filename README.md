@@ -36,11 +36,11 @@ Description
 
 ## Benefits of Delta
 
-## Automation and orchestration
+## [Automation and orchestration](./automation-orchestration/overview.md)
 
 ## [REST API](./automation-orchestration/rest-api.md)
 
-## CLI
+## [Databricks CLI](./automation-orchestration/databricks-cli.md)
 
 ## [Azure Data Factory](./automation-orchestration/azure-data-factory.md)
 
