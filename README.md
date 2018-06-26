@@ -6,7 +6,7 @@ Description
 
 ## [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
 
-# [Core Scenarios](./core-scenarios/README.md)
+# Core Scenarios
 
 ## Machine learning and advanced analytics
 
@@ -26,9 +26,9 @@ Description
 
 # [Business intelligence and data visualization](./business-intelligence-datavis/bi-and-datavis.md)
 
-# [Jobs](./jobs/README.md)
+# Jobs
 
-# [Azure Databricks Delta](./delta/README.md)
+# Azure Databricks Delta
 
 ## What and why
 
@@ -50,7 +50,7 @@ Description
 
 # [Developing Spark apps](./spark-apps/developing-spark-apps.md)
 
-# [Developing Spark structured streaming apps](./structured-streaming/README.md)
+# Developing Spark structured streaming apps
 
 # [Advanced settings and configuration](./advanced-settings-config/advanced-cluster-settings-configuration.md)
 
@@ -62,7 +62,7 @@ Description
 
 ## [External Hive Metastore](./advanced-settings-config/advanced-cluster-settings-configuration.md#external-hive-metastore)
 
-# [Security and network](./security-network/README.md)
+# Security and network
 
 ## Perimeter security
 
@@ -70,11 +70,11 @@ Description
 
 ## On-premises connectivity
 
-# [User management](./user-management/README.md)
+# User management
 
 # [Data sources](./data-sources/data-sources-overview.md)
 
-# [Solution-oriented scenario guidance](./solution-oriented-scenarios/README.md)
+# Solution-oriented scenario guidance
 
 ## Machine learning
 
@@ -86,6 +86,6 @@ Description
 
 ## MDW
 
-# [Troubleshooting](./troubleshooting/README.md)
+# Troubleshooting
 
-# [Performance tuning](./performance-tuning/README.md)
+# Performance tuning
