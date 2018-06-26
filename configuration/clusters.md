@@ -40,7 +40,7 @@ You do not select the driver type, just the worker type. The minimum and maximum
 The key benefits of serverless pools are:
 
 - **Auto-Configuration**: Optimizes the Spark configuration to get the best performance for SQL and machine learning workloads in a shared environment. Also chooses the best cluster parameters to save cost on infrastructure.
-- **Elasticity**: Automatically scales compute resources and local storage independently based on usage. See Autoscaling and Autoscaling Local Storage.
+- **Elasticity**: Automatically scales compute resources and local storage independently based on usage. See [Autoscaling](#autoscaling) and [Autoscaling Local Storage](https://docs.azuredatabricks.net/user-guide/clusters/autoscaling-local-storage.html#autoscaling-local-storage-azure).
 - **Fine-grained sharing**: Provides Spark-native fine-grained sharing for maximum resource utilization and minimum query latencies.
   - **Preemption**: Proactively preempts Spark tasks from over-committed users to ensure all users get their fair share of cluster time and their jobs complete in a timely manner even when contending with dozens of other users. This uses Spark Task Preemption for High Concurrency.
   - **Fault isolation**: Creates an environment for each notebook, effectively isolating them from one another.
