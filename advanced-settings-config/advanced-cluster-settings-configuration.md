@@ -2,7 +2,7 @@
 
 When you create a new cluster, there are several general settings you are most likely to configure before moving on to [development tasks](../spark-apps/developing-spark-apps.md). These settings are covered in detail within the [cluster configuration](../configuration/clusters.md) topic. However, there are several advanced settings and configuration options that can enhance your cluster's capabilities, such as tagging, logging, and the Spark Config. This topic discusses each of these settings and more, and when you may need to use them.
 
-**Note:** As compared to configuring an Apache Spark cluster locally or within a [Spark on HDInsight instance](), Azure Databricks comes preconfigured with optimal Spark settings that you should not need to modify.
+**Note:** As compared to configuring an Apache Spark cluster locally or within a [Spark on HDInsight instance](../overview/compare-to-hdinsight-spark.md), Azure Databricks comes preconfigured with optimal Spark settings that you should not need to modify.
 
 ## Spark Config
 
