@@ -38,13 +38,13 @@ Description
 
 ## [Automation and orchestration](./automation-orchestration/README.md)
 
-## REST API
+## [REST API](./automation-orchestration/rest-api.md)
 
 ## CLI
 
-## Azure Data Factory (./automation-orchestration/azure-data-factory.md)
+## [Azure Data Factory](./automation-orchestration/azure-data-factory.md)
 
-## Apache Airflow (./automation-orchestration/apache-airflow.md)
+## [Apache Airflow](./automation-orchestration/apache-airflow.md)
 
 # [Creating and using 3rd-party and local libraries](./libraries/third-party-and-local-libraries.md)
 
