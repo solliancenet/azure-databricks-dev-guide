@@ -52,15 +52,15 @@ Description
 
 # [Developing Spark structured streaming apps](./structured-streaming/README.md)
 
-# [Advanced settings and configuration](./advanced-settings-config/README.md)
+# [Advanced settings and configuration](./advanced-settings-config/advanced-cluster-settings-configuration.md)
 
-## External metastore
+## [Spark Config](./advanced-settings-config/advanced-cluster-settings-configuration.md#spark-config)
 
-## Tagging – workspace and cluster
+## [Logging](./advanced-settings-config/advanced-cluster-settings-configuration.md#logging)
 
-## Logging
+## [Cluster tags](./advanced-settings-config/advanced-cluster-settings-configuration.md#cluster-tags)
 
-## Spark config
+## [External Hive Metastore](./advanced-settings-config/advanced-cluster-settings-configuration.md#external-hive-metastore)
 
 # [Security and network](./security-network/README.md)
 
