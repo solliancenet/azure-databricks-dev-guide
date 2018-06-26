@@ -1,48 +1,20 @@
 # Azure Databricks User Managment
 
-start here
+When you deploy an instance of the premium edition of Azure Databricks, you can plan and implement fine-grained access control of your deployment.  Controls include configuring object-level access permissions for users and roles.  You can implement control over workspace storage and other objects, such as cluster actions, tables, etc...
 
-## AAD Authentication
+## Understanding User Roles
 
-From a high level, the Azure Databricks perimeter security...
+Users are grouped as follows: regular users and administrative users.  In Azure Databricks, there are three types of administrators: account owner, account admins, and cloud configuration admins.
 
-### AAD Conditonal Access
+1. **Account Owner** - The account owner can view and make changes to your Azure Databricks service and Azure subscription. This user is typically the person who signed up for or created your Azure Databricks service. If you don’t know who your account owner is, contact Azure Databricks support.  To see step-by-step instructions on how to manage an Azure Databricks account, including deleting an Azure Databricks service or cancelling an Azure subscription, see this [link](https://docs.azuredatabricks.net/administration-guide/account-settings/account.html)  
 
-Now let's take a deeper look under the covers. When you create an Azure Databricks service, you may decide to use the default VNET or...
+2. **Account Admins** - Account admins can manage users, workspace storage, and access control for your Azure Databricks instance. Admins can delegate admin privileges to other users.  
 
-### Guest Users
+3. **Cloud Configuration Admins** - Cloud configuration admins manage networking for your Azure Databricks instance.
 
-About those NSG Rules...
+## Manage Users with Admin Console
 
-## RBACs / Role-based access control
-
-This is thing too...
-
-## Pass-through authorization
-
-Oh that DNS...
-
-## Next Steps
-
-Read next: [The Databricks workspace](../workspace/workspace-overview.md)
-
-
-----Integrate from here
-
-Account Owner
-The account owner can view and make changes to your Azure Databricks service and Azure subscription. This user is typically the person who signed up for or created your Azure Databricks service. If you don’t know who your account owner is, contact Azure Databricks support.
-
-Account Admins
-Account admins can manage users, workspace storage, and access control for your Azure Databricks instance. Admins can delegate admin privileges to other users. Account admins use the Admin Console to view and change these properties. 
-
-Cloud Configuration Admins
-Cloud configuration admins manage networking for your Azure Databricks instance.
-
-Admin Console
-The Admin Console is where administrators can manage users, workspace storage, and access control in their Azure Databricks instance.
-
-Access the Admin Console
-Access the Admin Console at the top right of the product by clicking the Account user account icon and selecting Admin Console.
+The Azure Databricks Admin Console is the central location for administrators to manage users, workspace storage, and access control for their Azure Databricks instance.  To access the Admin Console click the Account user account icon at the top right of the product and then click on 'Admin Console' to open the Admin Console.
 
 Manage Users
 The following section describes how to add and remove users and manage their permissions.
@@ -71,6 +43,24 @@ You can add any user who belongs to the Azure Active Directory tenant of your Az
 If cluster access control is enabled, the user is added without cluster creation permission.
 
 Remove a user
+
+
+
+
+## AAD Authentication / AAD Conditonal Access / Guest Users
+
+Azure Active Directory Authentication, Azure Active Directory Conditional Access
+Guest users...
+Role-based pass through access (this is a future topic)
+
+## Next Steps
+
+Read next: [The Databricks workspace](../workspace/workspace-overview.md)
+
+
+----Integrate from here
+
+
 Go to the Admin Console.
 Click the Remove User Icon at the far right of the user row.
 Click Remove User to confirm.
