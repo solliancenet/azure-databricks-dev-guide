@@ -126,7 +126,9 @@ You find your Cluster Id by selecting the cluster in the Azure Databricks worksp
 
 ## Code example using Python
 
-The following example shows how to create a [Python 3](https://docs.azuredatabricks.net/user-guide/clusters/python3.html#python-3) cluster using the Databricks REST API and the popular [requests](http://docs.python-requests.org/en/master/) Python HTTP library:
+The following example shows how to create a [Python 3](https://docs.azuredatabricks.net/user-guide/clusters/python3.html#python-3) cluster using the Databricks REST API and the popular [requests](http://docs.python-requests.org/en/master/) Python HTTP library.
+
+The `/api/2.0/clusters/create` method will acquire new instances from Azure if necessary. This method is asynchronous; the returned `cluster_id` can be used to poll the cluster status. When this method returns, the cluster will be in a PENDING state. The cluster will be usable once it enters a RUNNING state.
 
 ```python
 import requests
@@ -160,6 +162,8 @@ if response.status_code == 200:
 else:
   print("Error creating cluster: %s: %s" % (response.json()["error_code"], response.json()["message"]))
 ```
+
+**Note:** Azure Databricks may not be able to acquire some of the requested nodes, due to cloud provider limitations or transient network issues. If it is unable to acquire a sufficient number of the requested nodes, cluster creation will terminate with an informative error message.
 
 ## Code example using C# in an Azure function
 
