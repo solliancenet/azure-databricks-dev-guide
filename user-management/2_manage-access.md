@@ -1,84 +1,8 @@
 # Azure Databricks User Managment
 
-When you deploy an instance of the premium edition of Azure Databricks, you can plan and implement fine-grained access control of your deployment.  Controls include configuring object-level access permissions for users and roles.  You can implement control over workspace storage and other objects, such as cluster actions, tables, etc...
+You can manage workspaces and ...
 
-## Understanding User Roles
-
-Users are grouped as follows: regular users and administrative users.  In Azure Databricks, there are three types of administrators: account owner, account admins, and cloud configuration admins.
-
-1. **Account Owner** - The account owner can view and make changes to your Azure Databricks service and Azure subscription. This user is typically the person who signed up for or created your Azure Databricks service. If you don’t know who your account owner is, contact Azure Databricks support.  To see step-by-step instructions on how to manage an Azure Databricks account, including deleting an Azure Databricks service or cancelling an Azure subscription, see this [link](https://docs.azuredatabricks.net/administration-guide/account-settings/account.html)  
-
-2. **Account Admins** - Account admins can manage users, workspace storage, and access control for your Azure Databricks instance. Admins can delegate admin privileges to other users.  
-
-3. **Cloud Configuration Admins** - Cloud configuration admins manage networking for your Azure Databricks instance.
-
-XXXX
-
-
-## AAD Authentication
-
-From a high level, the Azure Databricks perimeter security...
-
-### AAD Conditonal Access
-
-Now let's take a deeper look under the covers. When you create an Azure Databricks service, you may decide to use the default VNET or...
-
-### Guest Users
-
-About those NSG Rules...
-
-## RBACs / Role-based access control
-
-This is thing too...
-
-
-## Next Steps
-
-Read next: [The Databricks workspace](../workspace/workspace-overview.md)
-
-
-----Integrate from here
-
-
-Admin Console
-The Admin Console is where administrators can manage users, workspace storage, and access control in their Azure Databricks instance.
-
-Access the Admin Console
-Access the Admin Console at the top right of the product by clicking the Account user account icon and selecting Admin Console.
-
-Manage Users
-The following section describes how to add and remove users and manage their permissions.
-
-Managing Users
-Administrator users manage user accounts on the Admin Console page.
-
-../../_images/users-list.png
-An administrator can:
-
-Add and remove users.
-Grant and revoke permission to create clusters subject to cluster access control configuration.
-Grant and revoke administrator rights by selecting the Admin checkbox.
-In this workspace, William is an administrator and Greg can create clusters.
-
-Add a user
-Go to the Admin Console.
-
-Click Add User.
-
-Provide the user email ID.
-
-You can add any user who belongs to the Azure Active Directory tenant of your Azure Databricks workspace.
-
-../../_images/users-email-azure.png
-If cluster access control is enabled, the user is added without cluster creation permission.
-
-Remove a user
-Go to the Admin Console.
-Click the Remove User Icon at the far right of the user row.
-Click Remove User to confirm.
-
-Single Sign-On
-Single sign-on (SSO) in the form of Azure Active Directory-backed login is available in Azure Databricks for all customers. Here's a [link](https://docs.microsoft.com/en-us/azure/active-directory/connect/active-directory-aadconnect-sso)
+## Manage Workspace Storage
 
 Managing Workspace Storage
 Admin users manage workspace storage on the Workspace Storage tab in the Admin Console page.
@@ -604,7 +528,8 @@ Click the Enable button next to Personal Access Tokens.
 
 Click Confirm to confirm the change.
 
+## Next Steps
 
-
+Read next: [The Databricks workspace](../workspace/workspace-overview.md)
 
 
