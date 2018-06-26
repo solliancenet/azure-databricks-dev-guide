@@ -40,43 +40,7 @@ Refer to the official REST API documentation for full details:
 
 ## Requirements
 
-The first step you must complete before you can use the REST APIs is to generate a personal access token. Before you can do this, your administrator must enable personal access tokens for your organization's Azure Databricks account, as token-based authentication is disabled by default.
-
-### Enable token-based authentication
-
-Log in to the Azure Databricks workspace as an administrator, then follow these steps to enable personal access tokens:
-
-1.  Access the Admin Console by clicking on the user **Account** icon and selecting **Admin Console**.
-
-    ![Click on the user account icon and select Admin Console](media/access-admin-console.png 'Admin Console under user account')
-
-2.  Select the **Access Control** tab.
-
-    ![Select the Access Control tab](media/access-control-tab.png 'Access Control tab')
-
-3.  Select the **Enable** button next to **Personal Access Tokens**.
-
-4.  Select **Confirm** to confirm your change.
-
-### Create an access token
-
-Personal access tokens are similar to passwords; you should treat them with care. They expire after 90 days by default and can be revoked. Generate an access token from the Azure Databricks workspace, following these steps:
-
-- In your Azure Databricks workspace, select the **Account** icon in the top right corner, and then select **User Settings**.
-
-  ![Click on the user account icon and select User Settings](media/access-user-settings.png 'User Settings under user account')
-
-- On the **User Settings** screen, select **Generate New Token**.
-
-  ![Azure Databricks User Settings screen](media/azure-databricks-account-user-settings.png 'Azure Databricks User Settings')
-
-- In the **Generate New Token** dialog, enter a comment, such as "REST API", and then select **Generate**.
-
-  ![The Azure Databricks Generate New Token dialog is displayed, with "REST API" entered into the Comment field, and the Lifetime set to 90 days.](media/generate-new-token-rest.png 'Generate New Token')
-
-- Copy the generated token and save it for later. Once you've copied and pasted the token value, you can select Done on the Generate New Token dialog.
-
-  ![The Azure Databricks Generate New Token dialog is displayed, with a message stating, "Your token has been created successfully." The generated token is selected.](media/azure-databricks-copy-token.png 'Copy generated token')
+The first step you must complete before you can use the REST APIs is to generate a **personal access token**. If you have not yet generated one, follow the steps in this topic's [setup](setup.md) article to create a personal access token.
 
 ### General usage information
 
@@ -86,7 +50,7 @@ Personal access tokens are similar to passwords; you should treat them with care
 - For file upload, use `multipart/form-data`. Otherwise `application/x-www-form-urlencoded` is used
 - The response content type is JSON
 - Basic authentication is used to authenticate the user for every API call
-- User credentials are base64 encoded and are in the HTTP header for every API call. For example, `Authorization: Basic YWRtaW46YWRtaW4=`
+- User credentials are base64 encoded and are in the HTTP header for every API call. For example, `Authorization: Bearer YWRtaW46YWRtaW4=`
 
 ### Base URL
 
@@ -162,7 +126,9 @@ You find your Cluster Id by selecting the cluster in the Azure Databricks worksp
 
 ## Code example using Python
 
-The following example shows how to launch a [Python 3](https://docs.azuredatabricks.net/user-guide/clusters/python3.html#python-3) cluster using the Databricks REST API and the popular [requests](http://docs.python-requests.org/en/master/) Python HTTP library:
+The following example shows how to create a [Python 3](https://docs.azuredatabricks.net/user-guide/clusters/python3.html#python-3) cluster using the Databricks REST API and the popular [requests](http://docs.python-requests.org/en/master/) Python HTTP library.
+
+The `/api/2.0/clusters/create` method will acquire new instances from Azure if necessary. This method is asynchronous; the returned `cluster_id` can be used to poll the cluster status. When this method returns, the cluster will be in a PENDING state. The cluster will be usable once it enters a RUNNING state.
 
 ```python
 import requests
@@ -172,13 +138,21 @@ TOKEN = '<your-token>'
 
 response = requests.post(
   'https://%s/api/2.0/clusters/create' % (DOMAIN),
-  headers={'Authorization': "Basic " + base64.standard_b64encode("token:" + TOKEN)},
+  headers={'Authorization': "Bearer " + base64.standard_b64encode("token:" + TOKEN)},
   json={
   "new_cluster": {
-    "spark_version": "4.0.x-scala2.11",
+    "cluster_name": "demo",
+    "spark_version": "4.1.x-scala2.11",
     "node_type_id": "Standard_D3_v2",
-    'spark_env_vars': {
-      'PYSPARK_PYTHON': '/databricks/python3/bin/python3',
+    "spark_conf": {
+      "spark.speculation": true
+    },
+    "autoscale" : {
+      "min_workers": 2,
+      "max_workers": 50
+    },
+    "spark_env_vars": {
+      "PYSPARK_PYTHON": "/databricks/python3/bin/python3",
     }
   }
 )
@@ -186,8 +160,10 @@ response = requests.post(
 if response.status_code == 200:
   print(response.json()['cluster_id'])
 else:
-  print("Error launching cluster: %s: %s" % (response.json()["error_code"], response.json()["message"]))
+  print("Error creating cluster: %s: %s" % (response.json()["error_code"], response.json()["message"]))
 ```
+
+**Note:** Azure Databricks may not be able to acquire some of the requested nodes, due to cloud provider limitations or transient network issues. If it is unable to acquire a sufficient number of the requested nodes, cluster creation will terminate with an informative error message.
 
 ## Code example using C# in an Azure function
 

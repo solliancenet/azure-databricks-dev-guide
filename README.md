@@ -36,7 +36,7 @@ Description
 
 ## Benefits of Delta
 
-## [Automation and orchestration](./automation-orchestration/README.md)
+## Automation and orchestration
 
 ## [REST API](./automation-orchestration/rest-api.md)
 

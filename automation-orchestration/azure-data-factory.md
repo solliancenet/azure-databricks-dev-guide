@@ -14,7 +14,7 @@ Where ADF provides the most value is in its ability to quickly and easily create
 
 ## Transform data by running a Databricks notebook
 
-The activity with ADF specific to Azure Databricks is the Databricks Notebook activity. The Azure Databricks Notebook activity in an ADF pipeline runs a Databricks notebook in a specified cluster within your Azure Databricks workspace. This is a data transformation activity, which can be used to transform and processes raw data into predictions and insights. Transformation activities require a compute environment to  execute, such as Azure Databricks cluster or an Azure Batch. By chaining data transformation activities with another activity, such as a copy activity, you can leverage the power of ADF, and build full pipelines to process your data from multiple sources. You also have the ability to pass Azure Data Factory parameters to the Databricks notebook during execution, providing flexibility for data engineers and business users with access to trigger the pipeline.
+The activity with ADF specific to Azure Databricks is the Databricks Notebook activity. The Azure Databricks Notebook activity in an ADF pipeline runs a Databricks notebook in a specified cluster within your Azure Databricks workspace. This is a data transformation activity, which can be used to transform and processes raw data into predictions and insights. Transformation activities require a compute environment to execute, such as Azure Databricks cluster or an Azure Batch. By chaining data transformation activities with another activity, such as a copy activity, you can leverage the power of ADF, and build full pipelines to process your data from multiple sources. You also have the ability to pass Azure Data Factory parameters to the Databricks notebook during execution, providing flexibility for data engineers and business users with access to trigger the pipeline.
 
 ### The Databricks Notebook activity
 
@@ -24,22 +24,22 @@ Below is a sample JSON definition of a Databricks Notebook activity:
 
 ```json
 {
-    "activity": {
-        "name": "DemoNotebook",
-        "description": "MyActivity description",
-        "type": "DatabricksNotebook",
-        "linkedServiceName": {
-            "referenceName": "AzureDatabricks",
-            "type": "LinkedServiceReference"
-        },
-        "typeProperties": {
-            "notebookPath": "/adf/Databricks-ADF-demo",
-            "baseParameters": {
-                "inputpath": "input/folder1/",
-                "outputpath": "output/"
-            }
-        }
+  "activity": {
+    "name": "DemoNotebook",
+    "description": "MyActivity description",
+    "type": "DatabricksNotebook",
+    "linkedServiceName": {
+      "referenceName": "AzureDatabricks",
+      "type": "LinkedServiceReference"
+    },
+    "typeProperties": {
+      "notebookPath": "/adf/Databricks-ADF-demo",
+      "baseParameters": {
+        "inputpath": "input/folder1/",
+        "outputpath": "output/"
+      }
     }
+  }
 }
 ```
 
@@ -56,16 +56,17 @@ And for reference, here is the JSON for a sample Azure Databricks Linked Service
 
 ```json
 {
-    "name": "AzureDatabricks",
-    "type": "Microsoft.DataFactory/factories/linkedservices",
-    "properties": {
-        "type": "AzureDatabricks",
-        "typeProperties": {
-            "domain": "https://eastus2.azuredatabricks.net",
-            "existingClusterId": "0000-000000-xxxx00",
-            "encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFCUklDS1MtR1VJREUtQURGLURFTU9fMWZlMDNjNTgtOGQxMi00M2E4LWE0MTUtMDQwMjA1YWM1NDM0Ig0KfQ=="
-        }
+  "name": "AzureDatabricks",
+  "type": "Microsoft.DataFactory/factories/linkedservices",
+  "properties": {
+    "type": "AzureDatabricks",
+    "typeProperties": {
+      "domain": "https://eastus2.azuredatabricks.net",
+      "existingClusterId": "0000-000000-xxxx00",
+      "encryptedCredential":
+        "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFCUklDS1MtR1VJREUtQURGLURFTU9fMWZlMDNjNTgtOGQxMi00M2E4LWE0MTUtMDQwMjA1YWM1NDM0Ig0KfQ=="
     }
+  }
 }
 ```
 
@@ -83,7 +84,7 @@ To follow along, you will need to create the following resources in your Azure s
 
 - **Azure Databricks workspace**: You must have provisioned an Azure Databricks workspace in the Azure portal prior to using the ADF Databricks Notebook activity in a pipeline.
 - **Azure Databricks cluster**: Create a cluster in your Azure Databricks workspace prior to completing the walkthrough below.
-    > **NOTE**: It is possible to configure the Azure Databricks Linked Service to create a new Databricks cluster, but for this exercise it is assumed you have an existing cluster.
+  > **NOTE**: It is possible to configure the Azure Databricks Linked Service to create a new Databricks cluster, but for this exercise it is assumed you have an existing cluster.
 - **Azure Data Factory**: You should provision an instance of Azure Data Factory in your subscription, preferably in the same region as your Azure Databricks workspace to avoid data egress fees.
 
 For this scenario, we will be using flight and airplane data found in the `/databricks-datasets` directory, which is a repository of public, Azure Databricks-hosted datasets accessible from all Azure Databricks accounts.
@@ -116,21 +117,21 @@ print (x)
 
 The first thing you need to do is create the notebook that will be executed by your ADF Databricks Notebook activity. To follow best practices for a shared notebook, you will create a folder at the workspace level, named `adf`, and create the notebook within that.
 
-1. In the [Azure portal](https://portal.azure.com), navigate to your Databricks workspace, select **Workspace** from the left-hand menu, then select the Workspace menu down arrow, followed by **Create**, and then select **Folder**.
+1.  In the [Azure portal](https://portal.azure.com), navigate to your Databricks workspace, select **Workspace** from the left-hand menu, then select the Workspace menu down arrow, followed by **Create**, and then select **Folder**.
 
-    ![The Azure Databricks workspace menu is expanded and Create > Folder is highlighted in the menu.](media/azure-databricks-workspace-create-folder.png "Azure Databricks workspace create folder")
+    ![The Azure Databricks workspace menu is expanded and Create > Folder is highlighted in the menu.](media/azure-databricks-workspace-create-folder.png 'Azure Databricks workspace create folder')
 
-2. In the **New Folder Name** dialog, enter **adf** and select **Create**.
+2.  In the **New Folder Name** dialog, enter **adf** and select **Create**.
 
-    ![The Azure Databricks New Folder Name dialog is displayed, and "adf" is entered into the name field.](media/azure-databricks-workspace-new-folder-name.png "New folder name dialog")
+    ![The Azure Databricks New Folder Name dialog is displayed, and "adf" is entered into the name field.](media/azure-databricks-workspace-new-folder-name.png 'New folder name dialog')
 
-3. Now, select the menu drop down next to the newly created **adf** folder, and then select **Create > Notebook**.
+3.  Now, select the menu drop down next to the newly created **adf** folder, and then select **Create > Notebook**.
 
-    ![The adf menu is expanded under the Azure Databricks workspace and Create > Notebook is highlighted in the menu.](media/azure-databricks-workspace-create-notebook.png "Azure Databricks workspace create notebook")
+    ![The adf menu is expanded under the Azure Databricks workspace and Create > Notebook is highlighted in the menu.](media/azure-databricks-workspace-create-notebook.png 'Azure Databricks workspace create notebook')
 
-4. Enter a Name, such as Databricks-ADF-demo, on the **Create Notebook** dialog, ensure the language is set to **Python**, select your cluster from the drop down, and then select **Create**.
+4.  Enter a Name, such as Databricks-ADF-demo, on the **Create Notebook** dialog, ensure the language is set to **Python**, select your cluster from the drop down, and then select **Create**.
 
-    ![Screenshot of the Azure Databricks Create Notebook dialog. A name is entered, and the language is set to Python.](media/azure-databricks-create-notebook.png "Azure Databricks Create Notebook")
+    ![Screenshot of the Azure Databricks Create Notebook dialog. A name is entered, and the language is set to Python.](media/azure-databricks-create-notebook.png 'Azure Databricks Create Notebook')
 
 > **NOTE**: This notebook will be run by a call from Azure Data Factory, so when adding code based on the steps below, you should not be executing the cells. At this point, you are just setting the notebook up.
 
@@ -138,7 +139,7 @@ The first thing you need to do is create the notebook that will be executed by y
 
 Now that you have a notebook, let's add some basic configuration cells to the notebook, so it is ready to work with our datasets.
 
-1. In the first cell of the notebook, add the following code snippet to import the libraries that are needed for the actions to be performed in the notebook.
+1.  In the first cell of the notebook, add the following code snippet to import the libraries that are needed for the actions to be performed in the notebook.
 
     ```python
     import datetime
@@ -146,18 +147,18 @@ Now that you have a notebook, let's add some basic configuration cells to the no
     from pyspark.sql.functions import col, unix_timestamp
     ```
 
-2. Next, hover your mouse over the first cell, and the select the **Insert new cell (+)** icon at the bottom center of the cell.
+2.  Next, hover your mouse over the first cell, and the select the **Insert new cell (+)** icon at the bottom center of the cell.
 
-    ![Databricks Notebook Insert new cell icon.](media/azure-databricks-notebook-insert-new-cell.png "Databricks Notebook Insert new cell")
+    ![Databricks Notebook Insert new cell icon.](media/azure-databricks-notebook-insert-new-cell.png 'Databricks Notebook Insert new cell')
 
-3. In the newly inserted cell, add the following code to create an [input widget](https://docs.azuredatabricks.net/user-guide/notebooks/widgets.html), which will allow you to pass a specific year into the notebook to restrict your dataset, if desired.
+3.  In the newly inserted cell, add the following code to create an [input widget](https://docs.azuredatabricks.net/user-guide/notebooks/widgets.html), which will allow you to pass a specific year into the notebook to restrict your dataset, if desired.
 
     ```python
     # Create a dropdown widget to allow the year to be passed in. Default value is "*", which will include all years possible in the dataset.
     dbutils.widgets.dropdown("year", "*", ["*", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"], "Year")
     ```
 
-4. Finally, insert another new cell, and add the code below to write the value assigned to the `year` widget to a variable.
+4.  Finally, insert another new cell, and add the code below to write the value assigned to the `year` widget to a variable.
 
     ```python
     year = dbutils.widgets.get("year")
@@ -167,7 +168,7 @@ Now that you have a notebook, let's add some basic configuration cells to the no
 
 In the step below, you will add code to cells to ingest the airplane data from a CSV file, and perform some data munging to clean up the dataset.
 
-1. First, you will add code to specify the schema that should be used when importing the airplane data from its CSV file. Declaring a schema allows you to specify column names and datatypes, prior to loading the data into a [Spark DataFrame](https://docs.azuredatabricks.net/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html). Add a new cell to the notebook, and add the following:
+1.  First, you will add code to specify the schema that should be used when importing the airplane data from its CSV file. Declaring a schema allows you to specify column names and datatypes, prior to loading the data into a [Spark DataFrame](https://docs.azuredatabricks.net/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html). Add a new cell to the notebook, and add the following:
 
     ```python
     # Create schema for planes data
@@ -183,7 +184,7 @@ In the step below, you will add code to cells to ingest the airplane data from a
         StructField('YearBuilt', IntegerType())])
     ```
 
-2. Next, read the `plane-data.csv` file into a DataFrame, specifying the schema declared above, along with telling the `spark.read.csv()` method that the file contains a header row. Insert a new cell, and add the following code:
+2.  Next, read the `plane-data.csv` file into a DataFrame, specifying the schema declared above, along with telling the `spark.read.csv()` method that the file contains a header row. Insert a new cell, and add the following code:
 
     ```python
     # Read the planes CSV file into a DataFrame
@@ -192,7 +193,7 @@ In the step below, you will add code to cells to ingest the airplane data from a
         header=True)
     ```
 
-3. Now, you can add another new cell that will be used to get the data into the shape needed for the model being developed. This includes removing rows where there are null values, fixing instances where multiple versions of the manufacture's name are used, converting the IssueDate column to a unix_timestamp format, and dropping the Status column, which isn't needed for our model.
+3.  Now, you can add another new cell that will be used to get the data into the shape needed for the model being developed. This includes removing rows where there are null values, fixing instances where multiple versions of the manufacture's name are used, converting the IssueDate column to a unix_timestamp format, and dropping the Status column, which isn't needed for our model.
 
     ```python
     # Remove null rows
@@ -207,7 +208,7 @@ In the step below, you will add code to cells to ingest the airplane data from a
     planes = planes.withColumn("IssueDate", unix_timestamp("IssueDate","M/d/yyyy").cast("timestamp")).drop("Status")
     ```
 
-4. With the planes DataFrame now in desired shape, you can persist it to a Databricks [global table](https://docs.azuredatabricks.net/user-guide/tables.html) by adding the following code snippet to a new cell. Azure Databricks registers global tables to the Hive metastore, making them available across all clusters in your workspace.
+4.  With the planes DataFrame now in desired shape, you can persist it to a Databricks [global table](https://docs.azuredatabricks.net/user-guide/tables.html) by adding the following code snippet to a new cell. Azure Databricks registers global tables to the Hive metastore, making them available across all clusters in your workspace.
 
     ```python
     planes.write.mode("overwrite").saveAsTable("planes")
@@ -215,9 +216,9 @@ In the step below, you will add code to cells to ingest the airplane data from a
 
 ### Load flight data from DBFS
 
-Next, you will add code to ingest the fight data, and perform some data wrangling, similar to what you did above on the airplane data. The flight data includes multiple data files, one for each year, so the code below will make use of the `year` variable populated by the input widget. This code will allow you to request a single year, or pass in an asterisk (*) to retrieve all available years.
+Next, you will add code to ingest the fight data, and perform some data wrangling, similar to what you did above on the airplane data. The flight data includes multiple data files, one for each year, so the code below will make use of the `year` variable populated by the input widget. This code will allow you to request a single year, or pass in an asterisk (\*) to retrieve all available years.
 
-1. Insert a new cell into the notebook, and add the following code to read the `[Year].csv` file into a DataFrame. In this case, you will instruct the `spark.read.csv()` function to infer a schema based on the file contents, along with specifying that the file contains a header row.
+1.  Insert a new cell into the notebook, and add the following code to read the `[Year].csv` file into a DataFrame. In this case, you will instruct the `spark.read.csv()` function to infer a schema based on the file contents, along with specifying that the file contains a header row.
 
     ```python
     # Read the flight CSV files into a DataFrame
@@ -226,7 +227,7 @@ Next, you will add code to ingest the fight data, and perform some data wranglin
         header=True)
     ```
 
-2. Now, you insert a new cell to get the data into the shape needed for the model. This includes removing rows where TailNum values are set to 'NA' or 'UNKNOW', and fixing instances where data is set to 'NA' for various fields in the dataset.
+2.  Now, you insert a new cell to get the data into the shape needed for the model. This includes removing rows where TailNum values are set to 'NA' or 'UNKNOW', and fixing instances where data is set to 'NA' for various fields in the dataset.
 
     ```python
     # Remove rows where the TailNum value is 'NA' or 'UNKNOW'
@@ -242,14 +243,14 @@ Next, you will add code to ingest the fight data, and perform some data wranglin
     flights_dirty = flights_dirty.replace('NA', '0', 'LateAircraftDelay')
     ```
 
-3. The next step is to reduce the DataFrame to just the columns desired for the model. Insert another cell, and add the following:
+3.  The next step is to reduce the DataFrame to just the columns desired for the model. Insert another cell, and add the following:
 
     ```python
     # Define a new DataFrame that includes just the columns being used by the model
     flights = flights_dirty.select('Year', 'Month', 'DayOfMonth', 'DayOfWeek', 'UniqueCarrier', 'FlightNum', 'TailNum', flights_dirty['ArrDelay'].cast('integer'), flights_dirty['DepDelay'].cast('integer'), 'Origin', 'Dest', flights_dirty['Cancelled'].cast('integer'), 'CancellationCode', flights_dirty['CarrierDelay'].cast('integer'), flights_dirty['LateAircraftDelay'].cast('integer'))
     ```
 
-4. With the flights DataFrame now in desired shape, persist it to a Databricks global table by adding the following code snippet to a new cell.
+4.  With the flights DataFrame now in desired shape, persist it to a Databricks global table by adding the following code snippet to a new cell.
 
     ```python
     flights.write.mode("append").saveAsTable("flights")
@@ -259,7 +260,7 @@ Next, you will add code to ingest the fight data, and perform some data wranglin
 
 The last cell in your notebook will return a JSON status message to ADF.
 
-1. Add the following code to a new cell in your notebook:
+1.  Add the following code to a new cell in your notebook:
 
     ```python
     import json
@@ -278,136 +279,122 @@ With your notebook now in place, you are ready to create the ADF pipeline that w
 
 ### Add Azure Databricks Linked Service
 
-1. Navigate to your Data Factory in the [Azure portal](https://portal.azure.com), and select the **Author & Monitor** panel under Quick links. This will open a new Azure Data Factory tab in your browser.
+1.  Navigate to your Data Factory in the [Azure portal](https://portal.azure.com), and select the **Author & Monitor** panel under Quick links. This will open a new Azure Data Factory tab in your browser.
 
-    ![Azure Data Factory Monitor & Manage](media/adf-author-and-monitor.png "Azure Data Factory Quick Links")
+    ![Azure Data Factory Monitor & Manage](media/adf-author-and-monitor.png 'Azure Data Factory Quick Links')
 
-2. On the **Let's get started** page, switch to the **Edit** tab by selecting the pencil icon on the left-hand menu.
+2.  On the **Let's get started** page, switch to the **Edit** tab by selecting the pencil icon on the left-hand menu.
 
-    ![On the Let's get started page of the Azure Data Factory site, the edit icon is highlighted in the left-hand menu.](media/adf-get-started-edit.png "Azure Data Factory Get Started")
+    ![On the Let's get started page of the Azure Data Factory site, the edit icon is highlighted in the left-hand menu.](media/adf-get-started-edit.png 'Azure Data Factory Get Started')
 
-3. Select **Connections** at the bottom of the window, and then select **+ New**.
+3.  Select **Connections** at the bottom of the window, and then select **+ New**.
 
-    ![The +New button is highlighted on the Azure Data Factory Connections page.](media/adf-connections-new.png "Azure Data Factory New Connection")
+    ![The +New button is highlighted on the Azure Data Factory Connections page.](media/adf-connections-new.png 'Azure Data Factory New Connection')
 
-4. In the **New Linked Service** window, select the **Compute** tab, then on the compute tab select **Azure Databricks**, and then select **Continue**.
+4.  In the **New Linked Service** window, select the **Compute** tab, then on the compute tab select **Azure Databricks**, and then select **Continue**.
 
-    ![In the New Linked Service dialog, the Compute tab is highlighted, and Azure Databricks is selected.](media/adf-new-linked-service-azure-databricks.png "New Azure Databricks Linked Service")
+    ![In the New Linked Service dialog, the Compute tab is highlighted, and Azure Databricks is selected.](media/adf-new-linked-service-azure-databricks.png 'New Azure Databricks Linked Service')
 
-5. In the **New Linked Service** window, enter the following:
+5.  In the **New Linked Service** window, enter the following:
+
     - **Name**: Enter _AzureDatabricks_
     - **Select cluster**: Select _Existing cluster_
     - **Domain/Region**: Select the region where your Azure Databricks workspace is located
-    - **Access Token**: Generate this from your Azure Databricks workspace, following these steps:
-        - In your Azure Databricks workspace, select the **Account** icon in the top right corner, and then select **User Settings**.
-
-            ![Azure Databricks Account menu](media/azure-databricks-account-menu.png "Azure Databricks Account menu")
-
-        - On the **User Settings** screen, select **Generate New Token**.
-
-            ![Azure Databricks User Settings screen](media/azure-databricks-account-user-settings.png "Azure Databricks User Settings")
-
-        - In the **Generate New Token** dialog, enter a comment, such as "ADF access," and then select **Generate**.
-
-            ![The Azure Databricks Generate New Token dialog is displayed, with "ADF access" entered into the Comment field, and the Lifetime set to 90 days.](media/azure-databricks-generate-new-token.png "Generate New Token")
-
-        - Copy the generated token and paste it into the Access Token field on the New Linked Service dialog in ADF. Once you've copied and pasted the token value, you can select Done on the Generate New Token dialog.
-
-            ![The Azure Databricks Generate New Token dialog is displayed, with a message stating, "Your token has been created successfully." The generated token is selected.](media/azure-databricks-copy-token.png "Copy generated token")
+    - **Access Token**: Generate this from your Azure Databricks workspace. If you have not yet generated a personal access token, follow the steps in this topic's [setup](setup.md) article to create one.
 
     - Select **Access token**, and paste the generated token into the **Access token** box.
 
     - Retrieve your cluster Id by following the steps below, and pasting it into the **Existing cluster id** box.
 
-        - In your Cluster workspace, select **Clusters** from the left-hand menu, and then select your cluster from the list of available clusters.
+      - In your Cluster workspace, select **Clusters** from the left-hand menu, and then select your cluster from the list of available clusters.
 
-            ![In the Azure Databricks workspace, Clusters is highlighted in the left-hand menu, and a cluster is highlighted in the Interactive Clusters list.](media/azure-databricks-clusters.png "Azure Databricks workspace clusters")
+        ![In the Azure Databricks workspace, Clusters is highlighted in the left-hand menu, and a cluster is highlighted in the Interactive Clusters list.](media/azure-databricks-clusters.png 'Azure Databricks workspace clusters')
 
-        - On the page for your cluster, select the Tags tab at the bottom, and copy your ClusterId.
+      - On the page for your cluster, select the Tags tab at the bottom, and copy your ClusterId.
 
-        ![Azure Databricks Cluster Tags tab, with the ClusterId highlighted.](media/azure-databricks-cluster-id.png "Azure Databricks Cluster Tags")
+      ![Azure Databricks Cluster Tags tab, with the ClusterId highlighted.](media/azure-databricks-cluster-id.png 'Azure Databricks Cluster Tags')
 
     - Copy the Cluster Id value, and paste it into the Existing cluster id field on the New Linked Service dialog in ADF.
 
 - The New Linked Service dialog should resemble the following. Select **Test connection** and ensure you get a **Connection successful** message, and then select **Finish** to save the Linked Service.
 
-![New Azure Databricks Linked Service](media/notebook-activity-linked-service.png "New Linked Service")
+![New Azure Databricks Linked Service](media/notebook-activity-linked-service.png 'New Linked Service')
 
 ### Create a pipeline
 
-1. In the ADF dialog, select the **plus (+)** icon under Factory Resources, and then select **Pipeline**.
+1.  In the ADF dialog, select the **plus (+)** icon under Factory Resources, and then select **Pipeline**.
 
-    ![In the ADF dialog, the plus (+) icon is selected under Factory Resources, and Pipeline is highlighted.](media/adf-add-pipeline.png "Add ADF Pipeline")
+    ![In the ADF dialog, the plus (+) icon is selected under Factory Resources, and Pipeline is highlighted.](media/adf-add-pipeline.png 'Add ADF Pipeline')
 
-2. On the **General** tab of the pipeline properties, enter a name, such as _DatabricksPipeline_.
+2.  On the **General** tab of the pipeline properties, enter a name, such as _DatabricksPipeline_.
 
-    ![On the new ADF Pipeline General tab, the Name field is highlighted, and DatabricksPipeline is entered into the field.](media/adf-new-pipeline-general-tab.png "New ADF Pipeline General tab")
+    ![On the new ADF Pipeline General tab, the Name field is highlighted, and DatabricksPipeline is entered into the field.](media/adf-new-pipeline-general-tab.png 'New ADF Pipeline General tab')
 
-3. In the **Activities** toolbox, expand **Databricks** and drag the **Notebook** activity onto the pipeline design surface.
+3.  In the **Activities** toolbox, expand **Databricks** and drag the **Notebook** activity onto the pipeline design surface.
 
-    ![In the ADF Pipeline window, the Databricks Notebook activity is selected, and an arrow shows the action of dragging the activity onto the pipeline design surface.](media/adf-pipeline-activities-databricks-notebook-add.png "Add Databricks Notebook Activity")
+    ![In the ADF Pipeline window, the Databricks Notebook activity is selected, and an arrow shows the action of dragging the activity onto the pipeline design surface.](media/adf-pipeline-activities-databricks-notebook-add.png 'Add Databricks Notebook Activity')
 
-4. Enter a name, such as DemoNotebook, into the **General** properties tab for the Notebook activity.
+4.  Enter a name, such as DemoNotebook, into the **General** properties tab for the Notebook activity.
 
-    ![Databricks Notebook Activity Properties General tab](media/adf-new-activity-databricks-notebook-general-tab.png "Databricks Notebook Activity Properties General tab")
+    ![Databricks Notebook Activity Properties General tab](media/adf-new-activity-databricks-notebook-general-tab.png 'Databricks Notebook Activity Properties General tab')
 
-5. Select the **Settings** tab, and do the following:
+5.  Select the **Settings** tab, and do the following:
 
     - **Linked service**: Select the _AzureDatabricks_ linked service you created previously
 
     - **Notebook path**: Enter the path to the notebook you created above. Using a shared folder at the workspace level, this will typically be in the format _/folder-name/[Notebook-name]_. For example, if you named your notebook Databricks-ADF-demo, and your shared folder is named adf, the path would be **/adf/Databricks-ADF-demo**.
 
-    - Expand **Base Parameters**, select **+ New**, enter **year** for the Name, and enter a four-digit year between 1987 and 2008, or enter "*" to include all years of flight data.
+    - Expand **Base Parameters**, select **+ New**, enter **year** for the Name, and enter a four-digit year between 1987 and 2008, or enter "\*" to include all years of flight data.
 
-        ![Databricks Notebook Activity Properties Settings tab, with the AzureDatabricks linked service selected, the path to the notebook entered, and a parameter named "year" with a value of "*" added.](media/adf-new-activity-databricks-notebook-settings-tab.png "Databricks Notebook Activity Properties Settings tab")
+      ![Databricks Notebook Activity Properties Settings tab, with the AzureDatabricks linked service selected, the path to the notebook entered, and a parameter named "year" with a value of "*" added.](media/adf-new-activity-databricks-notebook-settings-tab.png 'Databricks Notebook Activity Properties Settings tab')
 
-6. Next, validate the pipeline by selecting **Validate on the pipeline toolbar.
+6.  Next, validate the pipeline by selecting \*\*Validate on the pipeline toolbar.
 
-    ![The Validate button on the new pipeline toolbar is highlighted.](media/adf-new-pipeline-toolbar-validate.png "ADF new pipeline Validate")
+    ![The Validate button on the new pipeline toolbar is highlighted.](media/adf-new-pipeline-toolbar-validate.png 'ADF new pipeline Validate')
 
-7. You should see a message that your pipeline has been validated, with no errors.
+7.  You should see a message that your pipeline has been validated, with no errors.
 
-    ![The ADF new pipeline validated message is displayed](media/adf-new-pipeline-validation.png "ADF new pipeline validated")
+    ![The ADF new pipeline validated message is displayed](media/adf-new-pipeline-validation.png 'ADF new pipeline validated')
 
-8. You can also view the underlying JSON code behind your pipeline by selecting the **Code** link at to top right of the pipeline tab.
+8.  You can also view the underlying JSON code behind your pipeline by selecting the **Code** link at to top right of the pipeline tab.
 
-    ![The Code button displays the JSON code associated with the ADF pipeline.](media/adf-pipeline-code-link.png "Code button")
+    ![The Code button displays the JSON code associated with the ADF pipeline.](media/adf-pipeline-code-link.png 'Code button')
 
-9. The JSON should look something like the following:
+9.  The JSON should look something like the following:
 
     ```json
     {
-        "name": "DatabricksPipeline",
-        "properties": {
-            "activities": [
-                {
-                    "name": "DemoNotebook",
-                    "type": "DatabricksNotebook",
-                    "policy": {
-                        "timeout": "7.00:00:00",
-                        "retry": 0,
-                        "retryIntervalInSeconds": 30,
-                        "secureOutput": false
-                    },
-                    "typeProperties": {
-                        "notebookPath": "/adf/Databricks-ADF-demo",
-                        "baseParameters": {
-                            "year": "*"
-                        }
-                    },
-                    "linkedServiceName": {
-                        "referenceName": "AzureDatabricks",
-                        "type": "LinkedServiceReference"
-                    }
-                }
-            ]
-        }
+      "name": "DatabricksPipeline",
+      "properties": {
+        "activities": [
+          {
+            "name": "DemoNotebook",
+            "type": "DatabricksNotebook",
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30,
+              "secureOutput": false
+            },
+            "typeProperties": {
+              "notebookPath": "/adf/Databricks-ADF-demo",
+              "baseParameters": {
+                "year": "*"
+              }
+            },
+            "linkedServiceName": {
+              "referenceName": "AzureDatabricks",
+              "type": "LinkedServiceReference"
+            }
+          }
+        ]
+      }
     }
     ```
 
 10. Now, publish the pipeline. Select **Publish All** in the ADF toolbar. The Data Factory UI will publishes your entities (linked services and pipeline) to the Azure Data Factory service.
 
-    ![The Publish All button is highlighted on the ADF toolbar.](media/adf-toolbar-publish-all.png "ADF Publish All")
+    ![The Publish All button is highlighted on the ADF toolbar.](media/adf-toolbar-publish-all.png 'ADF Publish All')
 
 ### Trigger the pipeline
 
@@ -419,33 +406,33 @@ To run your pipeline, it needs to be triggered. For this scenario, you will manu
 
 > For more info on using triggers in your ADF pipelines, see [Pipeline execution and triggers in Azure Data Factory](https://docs.microsoft.com/azure/data-factory/concepts-pipeline-execution-triggers).
 
-1. In the ADF window, select **Trigger** from the pipeline toolbar, and then select **Trigger Now**.
+1.  In the ADF window, select **Trigger** from the pipeline toolbar, and then select **Trigger Now**.
 
-    ![Trigger now is selected from the ADF Pipeline Trigger menu.](media/adf-pipeline-toolbar-trigger-now.png "ADF Pipeline Trigger Now")
+    ![Trigger now is selected from the ADF Pipeline Trigger menu.](media/adf-pipeline-toolbar-trigger-now.png 'ADF Pipeline Trigger Now')
 
-2. In the Pipeline Run dialog, select **Finish**.
+2.  In the Pipeline Run dialog, select **Finish**.
 
 ### Monitor the pipeline
 
 The pipeline Databricks Notebook activity will run the target notebook as a Job on your Azure Databricks cluster. You can monitor execution progress through the ADF UI, and when the job is complete, you can view the tables it created in your ADF workspace.
 
-1. After starting your pipeline, you can monitor its progress by selecting the **Monitor** icon in the left-hand menu. On this screen, you will see the overall status of your pipeline. To see the details of individual activities, select the **View Activity Runs** icon under **Actions** for your pipeline.
+1.  After starting your pipeline, you can monitor its progress by selecting the **Monitor** icon in the left-hand menu. On this screen, you will see the overall status of your pipeline. To see the details of individual activities, select the **View Activity Runs** icon under **Actions** for your pipeline.
 
-    ![The ADF Monitor menu item is selected and highlighted, and the DatabricksPipeline is displayed. The View Activity Runs Action is highlighted for the pipeline.](media/adf-monitor-pipeline.png "ADF Monitor Pipeline")
+    ![The ADF Monitor menu item is selected and highlighted, and the DatabricksPipeline is displayed. The View Activity Runs Action is highlighted for the pipeline.](media/adf-monitor-pipeline.png 'ADF Monitor Pipeline')
 
     > NOTE: If your cluster is terminated, the Databricks Notebook activity within your pipeline will start the cluster, so it does not need to be running prior to starting your pipeline.
 
-2. Once the pipeline completes, the status will switch to **Succeeded**. (You will need to hit refresh on the Monitor toolbar to update the status.) The time the pipeline takes to complete will depend on what you passed into the `year` parameter. If you requested all data (value of "*"), it can take up to 15 minutes to finish.
+2.  Once the pipeline completes, the status will switch to **Succeeded**. (You will need to hit refresh on the Monitor toolbar to update the status.) The time the pipeline takes to complete will depend on what you passed into the `year` parameter. If you requested all data (value of "\*"), it can take up to 15 minutes to finish.
 
-    ![The ADF pipeline is displayed in the Monitor page, with a status of Succeeded.](media/adf-monitor-pipeline-succeeded.png "ADF Pipeline succeeded")
+    ![The ADF pipeline is displayed in the Monitor page, with a status of Succeeded.](media/adf-monitor-pipeline-succeeded.png 'ADF Pipeline succeeded')
 
-3. You can verify the table were created by the ADF Databricks Notebook activity by going into your Databricks workspace, and then selecting **Data** from the left-hand menu. This will bring up a list of tables in the workspace. There you should see `flights` and `planes` tables.
+3.  You can verify the table were created by the ADF Databricks Notebook activity by going into your Databricks workspace, and then selecting **Data** from the left-hand menu. This will bring up a list of tables in the workspace. There you should see `flights` and `planes` tables.
 
-    ![The list of Tables in the Azure Databricks workspace are displayed in the Data page.](media/azure-databricks-data-tables.png "Azure Databricks Tables")
+    ![The list of Tables in the Azure Databricks workspace are displayed in the Data page.](media/azure-databricks-data-tables.png 'Azure Databricks Tables')
 
 ## Summary
 
-In the scenario above, you created a simple ADF pipeline to execute a basic Databricks notebook. As you look to expand on this, some things consider are how you can use Databricks  notebooks to operationalize trained machine learning models, and using ADF pipelines to score newly received data on a scheduled basis. After scoring the data, you can many options, from writing it to Databricks tables and creating reports directly from your Databricks tables with Power BI, to advanced analytics with Azure SQL Data Warehouse.
+In the scenario above, you created a simple ADF pipeline to execute a basic Databricks notebook. As you look to expand on this, some things consider are how you can use Databricks notebooks to operationalize trained machine learning models, and using ADF pipelines to score newly received data on a scheduled basis. After scoring the data, you can many options, from writing it to Databricks tables and creating reports directly from your Databricks tables with Power BI, to advanced analytics with Azure SQL Data Warehouse.
 
 Azure Data Factory provides a powerful tool for incorporating Azure Databricks into your advanced ETL/ELT activities.
 
