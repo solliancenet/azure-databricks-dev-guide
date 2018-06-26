@@ -1,52 +1,43 @@
-# Azure Databricks User Managment
+# Manage Azure Databricks Access Control
 
 You can manage workspaces and ...
 
 ## Manage Workspace Storage
 
-Managing Workspace Storage
 Admin users manage workspace storage on the Workspace Storage tab in the Admin Console page.
 
-Purge workspace
-You can delete workspace objects such as entire notebooks, individual notebook cells, and individual notebook comments, but they are recoverable.
+Purge workspace  
+You can delete workspace objects such as entire notebooks, individual notebook cells, and individual notebook comments, but they are recoverable. To permanently purge deleted workspace objects:
 
-To permanently purge deleted workspace objects:
-
-Click the Purge button.
-
-../../_images/purge-workspace.png
+Click the Purge button.  
+ ![purge workspace](media/admin-workspace-storage.png) 
 Click Yes, purge to confirm.
 
 IMPORTANT: Once purged, workspace objects are not recoverable.
 
-Purge notebook revision history
+Purge notebook revision history  
 To permanently purge notebook revision history:
 
 In the Timeframe drop-down, select the timeframe to purge:
 Click the Purge button.
 ../../_images/purge-revision-history.png
 Click Yes, purge to confirm.
-Warning
+IMPORTANT: Once purged, revision history is not recoverable.
 
-Once purged, revision history is not recoverable.
-
-Purge cluster logs
+Purge cluster logs  
 To permanently purge Spark driver logs and historical metrics snapshots for all clusters in the workspace:
 
 Click the Purge button.
 ../../_images/purge-cluster-logs.png
 Click Yes, purge to confirm.
-Warning
 
 IMPORTANT: Once purged, cluster logs are not recoverable.
 
-Manage Access Control
+### Manage Access Control  
 The following section describes how to set up access control and enable token-based authentication for your Azure Databricks instance.
 
-Workspace Access Control
-Note
-
-Access control is available only in the Premium SKU.
+Workspace Access Control  
+Note: Access control is available only in the Premium SKU.
 
 By default, all users can create and modify workspace objects unless an administrator enables workspace access control. With workspace access control, individual permissions determine a user’s abilities. This topic describes the individual permissions and how to enable and configure workspace access control.
 
