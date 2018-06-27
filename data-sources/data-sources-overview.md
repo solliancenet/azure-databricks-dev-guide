@@ -206,6 +206,42 @@ To create a mount point for an Azure Data Lake Store, complete the following:
     dbutils.fs.unmount("/mnt/<mount-name>")
     ```
 
+## Upload files directly into Azure Databricks tables
+
+Before moving on to the next Azure data source, we are going to highlight another way to get data directly into Azure Databricks: upload CSV files directly into Azure Databricks global tables.
+
+> Make sure your cluster is started before beginning the steps below, as it will be used to preview the data uploaded from the CSV file.
+
+1. Three sample files to be used for this can be found at <http://bit.ly/2wGAqrl>. Download the ZIP file, and extract the three files contained within:
+
+    - FlightDelaysWithAirportCodes.csv
+    - FlightWeatherWithAirportCodes.csv
+    - AirportCodeLocationLookupClean.csv
+
+2. Open your Azure Databricks workspace in the [Azure portal](https://portal.azure.com).
+
+3. In your workspace, select **Data** from the left-hand menu, select **Default** under Databases, and then select the plus (+) icon in the top right corner, next to Tables.
+
+    ![In the Azure Databricks workspace, Data is selected in the left-hand menu, and default is highlighted under Databases.](media/azure-databricks-workspace-databases.png "Azure Databricks databases")
+
+4. Select **Upload File** under Create New Table, and then drag and drop the `FlightDelaysWithAirportCodes.csv` file into the file area. (Note: Clicking Select to browse to the file won't work, because it attempts to find files in the /FileStore/tables/ directory in DBFS.)
+
+    ![In the Create New Table dialog in Azure Databricks, Upload File is selected and the FlightDelaysWithAirportCodes.csv file has been dropped in the file area.](media/azure-databricks-workspace-databases-create-new-table.png "Create new table")
+
+5. Select **Create Table with UI**, and then select your cluster to preview the table and select **Preview Table**.
+
+6. Change the Table Name to "flight_delays_with_airport_codes" (remove "_csv"), check the **First row is header** and **Infer schema** boxes, and then select **Create Table**.
+
+    > For the demo, we will use **Infer schema** to assign data types, but for real-world scenarios, you would want to evaluate each field, and the data type being assigned, and make sure they are correct for your data.
+
+    ![In the Specify Table Attributes section, the Table Name is specified as "flight_delays_with_airport_codes", and the First row is header and Infer schema check boxes are checked.](media/azure-databricks-workspace-create-table-specify-attributes.png "Specify Table Attributes")
+
+7. Select **Data** again from the left-hand menu, and you will notice **flight_delays_with_airport_codes** now listed under tables.
+
+8. Repeat steps 3 - 6 above for the `FlightWeatherWithAirportCodes.csv` and `AirportCodeLocationLookupClean.csv` files, changing the name in step 6 appropriately for each file.
+
+9. Each of the tables is now accessible from your cluster, as will be demonstrated below in the Azure Cosmos DB and SQL Data Warehouse examples below.
+
 ## Cosmos DB
 
 [Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) is Microsoft’s globally distributed, multi-model database. Azure Cosmos DB enables you to elastically and independently scale throughput and storage across any number of Azure’s geographic regions. It offers throughput, latency, availability, and consistency guarantees with comprehensive service level agreements (SLAs). Azure Cosmos DB provides APIs for the following data models, with SDKs available in multiple languages:
@@ -216,125 +252,147 @@ To create a mount point for an Azure Data Lake Store, complete the following:
 - Graph (Gremlin) API
 - Table API
 
+To demonstrate how to connect to Cosmos DB, and read and write data, you can following along in the step-by-step walk-through below.
+
 ### Prerequisites
 
-The following steps need to be performed prior to connecting Azure Databricks with Azure Databricks.
+Before continuing with the walk-through, you need the following:
+
+1. An Azure Cosmos DB in your subscription.
+2. Within your Cosmos DB instance, create a new database named "demo".
+3. Add a collection named "airport_code_location_lookup" to the "demo" database.
+4. You uploaded the files as described in [Upload files directly into Azure Databricks tables](#upload-files-directly-into-azure-databricks-tables).
+
+Once your Cosmos DB is provisioned, the following steps need to be performed prior to connecting Azure Databricks with Azure Databricks.
 
 - A Databricks workspace with an active cluster.
-- Prior to connecting your Azure Databricks instance with Azure Cosmos DB, you need to include the Azure Cosmos DB Spark JAR, by following the instructions provided with the [Azure Cosmos DB Spark Connector](https://github.com/Azure/azure-cosmosdb-spark). The connector requires Databricks Runtime 3.4 or higher.
-- Once you've obtained the JAR, upload the Java JAR or Scala JAR to Databricks by following the [Upload a Java JAR or Scala JAR](https://docs.azuredatabricks.net/user-guide/libraries.html#uploading-libraries) instructions.
+- Prior to connecting your Azure Databricks instance with Azure Cosmos DB, you need to include the Azure Cosmos DB Spark JAR, by following these instructions:
+  - Download the [azure-cosmosdb-spark_2.2.0_2.11 (1.11) library](http://repo1.maven.org/maven2/com/microsoft/azure/azure-cosmosdb-spark_2.2.0_2.11/1.1.1/azure-cosmosdb-spark_2.2.0_2.11-1.1.1-uber.jar) (The connector requires Databricks Runtime 3.4 or higher.)
+  - Upload the downloaded JAR files to Databricks following the instructions in [Upload a Java JAR or Scala JAR](https://docs.azuredatabricks.net/user-guide/libraries.html#uploading-libraries)
+  - [Attach the uploaded libraries](https://docs.azuredatabricks.net/user-guide/libraries.html#attach-libraries) to your Databricks cluster
+    > Learn more about the [Azure Cosmos DB Spark Connector](https://github.com/Azure/azure-cosmosdb-spark).
 
 ### Reading data from Cosmos DB
 
 To demonstrate how to create a connection, and enable querying against Cosmos DB, we've providing the following step-by-step walk-through.
 
-In order to query Cosmos DB, you need to first create a configuration object that contains the configuration information. If you are curious, read the [configuration reference](https://github.com/Azure/azure-cosmosdb-spark/wiki/Configuration-references) for details on all of the options.
+1. In order to query Cosmos DB, you need to first create a configuration object that contains the configuration information. If you are curious, read the [configuration reference](https://github.com/Azure/azure-cosmosdb-spark/wiki/Configuration-references) for details on all of the options.
 
-The core items you need to provide are:
+    The core items you need to provide are:
 
-- **Endpoint**: Your Cosmos DB url (i.e. <https://youraccount.documents.azure.com:443/>)
-- **Masterkey**: The primary or secondary key string for you Cosmos DB account
-- **Database**: The name of the database
-- **Collection**: The name of the collection that you wish to query
+    - **Endpoint**: Your Cosmos DB url (i.e. <https://your-cosmos-db.documents.azure.com:443/>)
+    - **Masterkey**: The primary or secondary key string for you Cosmos DB account
+    - **Database**: The name of the database
+    - **Collection**: The name of the collection that you wish to query
 
-1. In your Databricks workspace, create a new notebook and enter the following code to create the connection to the demo environment:
+2. In your Databricks workspace, create a new notebook and enter the following code to create the connection to the demo environment, substituting in your values for the tokenized components:
 
     ```python
     readConfig = {
-    "Endpoint" : "https://databricksdemo.documents.azure.com:443/",
-    "Masterkey" : "TzGc9tR66yHo3kPLmsngQKQZjjy64PKeKOSq1grtjal5CpkwjZLotkhJWNJiGBrFZ5eQ9Nsy76KNEgWWqgeAGQ==",
-    "Database" : "demo",
-    "Collection" : "documents",
-    "preferredRegions" : "West US",
-    "SamplingRatio" : "1.0",
-    "schema_samplesize" : "1000",
-    "query_pagesize" : "2147483647",
+        "Endpoint" : "https://<your-cosmos-db>.documents.azure.com:443/",
+        "Masterkey" : "<your-master-key>",
+        "Database" : "demo",
+        "Collection" : "airport_code_location_lookup",
+        "preferredRegions" : "<your-cosmos-db-region>",
+        "SamplingRatio" : "1.0",
+        "schema_samplesize" : "1000",
+        "query_pagesize" : "2147483647"
     }
     ```
 
-2. After providing the configuration, you can use the Read API to query the collection.
+3. After providing the configuration, you can use the Read API to query the collection.
 
     ```python
     # Connect via Spark connector to create Spark DataFrame
-    documents = spark.read.format("com.microsoft.azure.cosmosdb.spark").options(**readConfig).load()
-    display(documents)
+    airport_code_location_lookup = spark.read.format("com.microsoft.azure.cosmosdb.spark").options(**readConfig).load()
+    display(airport_code_location_lookup)
     ```
 
-3. Once you have a DataFrame connected to your Cosmos DB collection, you can register a temporary table and query it using Spark SQL just as you would any other DataFrame.
-
-    ```python
-    documents.createOrReplaceTempView("documents")
-    ```
-
-    ```sql
-    %sql
-    SELECT id, title FROM documents WHERE partitionId = "0"
-    ```
+4. At this point, there isn't any data in the `airport_code_location_lookup` collection, so you will get "OK" back as a response. Move on to the next section to write some data to Cosmos DB.
 
 ### Write data to Cosmos DB
 
-Now, let's expand on the example above, and look at what is involved in writing data back to Cosmos DB. By creating a DataFrame that contains the desired changes, you can use the Write API to save the changes back.
-
-> Spark DataFrames are immutable, so if you want to insert new rows into a Cosmos DB collection, you need to create a new DataFrame. If you want to both modify and insert, the connector supports the upsert operation.
+Expanding on the example above, let's look at what is involved in writing data to Cosmos DB. By creating a DataFrame that contains the desired data, you can use the Write API to save the data to Cosmos DB.
 
 To write to the Cosmos DB, do the following:
 
-1. In a new cell, create a new DataFrame that contains one new row, using the same schema as was acquired when you originally queried the collection. You can then create a union between the DataFrames, so an upsert can be performed that will result in the one new row being added. In the new row we create below, we only specify values for the partitionId and title fields. By setting all the other values to `None` we allow Cosmos DB to automatically set those values on the server side.
+1. First, insert a new cell into your notebook, and add the following code to set the `writeConfig` for your Cosmos DB instance. Take note of the `Upsert` parameter used here, which enables Upsert actions on the Cosmos DB side.
+
+    ```python
+    writeConfig = {
+        "Endpoint" : "https://<your-cosmos-db>.documents.azure.com:443/",
+        "Masterkey" : "<your-master-key>",
+        "Database" : "demo",
+        "Collection" : "airport_code_location_lookup",
+        "Upsert" : "true"
+    }
+    ```
+
+2. In a new cell, create a new DataFrame containing the data from the `airport_code_location_lookup` table you created in the [Upload files directly into Azure Databricks tables](#upload-files-directly-into-azure-databricks-tables) section above.
+
+    ```python
+    airportCodes = spark.sql("SELECT * FROM airport_code_location_lookup_clean")
+    ```
+
+3. Now, add another new cell, and add code to write the data from the `airportCodes` DatFrame to the `airport_code_location_lookup` collection in Cosmos DB.
+
+    ```python
+    airportCodes.write.format("com.microsoft.azure.cosmosdb.spark").options(**writeConfig).save()
+    ```
+
+4. You can now rerun the read query and view the data written to the table.
+
+    ```sql
+    airport_code_location_lookup = spark.read.format("com.microsoft.azure.cosmosdb.spark").options(**readConfig).load()
+    display(airport_code_location_lookup)
+    ```
+
+    ![Query results from the airport_code_location_lookup collection in Cosmos DB are displayed.](media/cosmos-db-airport-codes-query-results.png "Query results from Cosmos DB")
+
+5. Now, let's insert a new row into the `airport_code_location_lookup` table.
+
+6. Spark DataFrames are immutable, so if you want to insert new rows into a Cosmos DB collection, you need to create a new DataFrame. If you want to both modify and insert, the connector supports the upsert operation. You can then create a union between the DataFrames, so an upsert can be performed that will result in the one new row being added. In the new row we create below, we only specify values for the Airport, Airport_Id, Display_Airport_Name, Latitude, and Longitude fields. By setting all the other values to `None` we allow Cosmos DB to automatically set those values on the server side.
 
     ```python
     from pyspark.sql import Row
 
     newRows = [
-      Row(None,None,None,None,None,None,"0","This is a new row!")
+      Row("ZZZ","99999","Demo Airport","44.31666667","-75.89972222",None,None,None,None,None,None)
     ]
 
     parallelizeRows = spark.sparkContext.parallelize(newRows)
-    new_documents = spark.createDataFrame(parallelizeRows, documents.schema)
 
-    updated_documents = documents.union(new_documents)
-    display(updated_documents)
+    # Create a new DataFrame
+    new_airport_codes = spark.createDataFrame(parallelizeRows, airport_code_location_lookup.schema)
+
+    # Union the new DataFrame with the airport_code_location_lookup DataFrame
+    updated_airport_codes = airport_code_location_lookup.union(new_airport_codes)
+    display(updated_airport_codes)
     ```
 
-2. By default, the Connector will not allow writing to a collection that has documents already. In order to perform an upsert, the `overwrite` mode must specified.
+7. By default, the Connector will not allow writing to a collection that has documents already. In order to perform an upsert, the `overwrite` mode must specified.
 
     ```python
-    updated_documents.write.format("com.microsoft.azure.cosmosdb.spark").mode("overwrite").options(**writeConfig).save()
+    updated_airport_codes.write.format("com.microsoft.azure.cosmosdb.spark").mode("overwrite").options(**writeConfig).save()
     ```
 
-3. Now, you can the query our view again and see the updated row.
+8. Now, run the read command again to retrieve the newly inserted row from Cosmos DB, and write the results into a temporary view.
+
+    ```python
+    airport_codes = spark.read.format("com.microsoft.azure.cosmosdb.spark").options(**readConfig).load()
+    airport_codes.createOrReplaceTempView("airportCodes")
+    ```
+
+9. Finally, use SQL to query for the view for the newly added airport code.
 
     ```sql
     %sql
-    SELECT * FROM documents
+    SELECT * FROM airportCodes WHERE airport = 'ZZZ'
     ```
 
-## Upload files directly into Azure Databricks tables
+    ![The newly inserted airport code is highlighted in the query results.](media/cosmos-db-upsert-query-results.png "Query results")
 
-Before we move on to the final Azure data source, we are going to highlight another way to get data directly into Azure Databricks: upload CSV files directly into Azure Databricks global tables.
-
-Included in this repo is a [small sample set of data](./sample-data/FactInternetSales.csv) for you will use in the SQL Data Warehouse walk-through below. To prep for that, you are going to upload this file directly into an Azure Databricks table.
-
-    > Make sure your cluster is started before beginning the steps below, as it will be used to preview the data uploaded from the CSV file.
-
-1. Download the [sample CSV](./sample-data/FactInternetSales.csv), and then open your Azure Databricks workspace in the [Azure portal](https://portal.azure.com).
-
-2. In your workspace, select **Data** from the left-hand menu, select **Default** under Databases, and then select the plus (+) icon in the top right corner, next to Tables.
-
-    ![In the Azure Databricks workspace, Data is selected in the left-hand menu, and default is highlighted under Databases.](media/azure-databricks-workspace-databases.png "Azure Databricks databases")
-
-3. Select **Upload File** under Create New Table, and then drag and drop the `FactInternetSales.csv` file into the file area. (Note: Clicking Select to browse to the file won't work, because it attempts to find files in the /FileStore/tables/ directory in DBFS.)
-
-    ![In the Create New Table dialog in Azure Databricks, Upload File is selected and the FactInternetSales.CSV file has been dropped in the file area.](media/azure-databricks-workspace-databases-create-new-table.png "Create new table")
-
-4. Select **Create Table with UI**, and then select your cluster to preview the table and select **Preview Table**.
-
-5. Change the Table Name to "factinternetsales" (remove "_csv"), check the **First row is header** and **Infer schema** boxes, and then select **Create Table**.
-
-    > For the demo, we will use **Infer schema** to assign data types, but for real-world scenarios, you would want to evaluate each field, and the data type being assigned, and make sure they are correct for your data.
-
-    ![In the Specify Table Attributes section, the Table Name is specified as "factinternetsales", and the First row is header and Infer schema check boxes are checked.](media/azure-databricks-workspace-create-table-specify-attributes.png "Specify Table Attributes")
-
-6. Select **Data** again from the left-hand menu, and you will notice **factinternetsales** now listed under tables. It will accessible from your cluster, as we will demonstrate below in the SQL Data Warehouse example.
+> If you are following along in the walk-through, we are done with Azure Cosmos DB for this article, so it is recommended that you delete your Azure Cosmos DB instance to save on costs.
 
 ## SQL Data Warehouse
 
@@ -350,20 +408,21 @@ The SQL DW connector is more suited to ETL than to interactive queries, because 
 
 The following steps need to be performed prior to connecting Azure Databricks with SQL Data Warehouse.
 
-    1. Create an Azure Databricks workspace and cluster
-    2. Create a new Databricks notebook
-    3. Create a general purpose Azure Storage account
-    4. Provision an Azure SQL Data Warehouse
+1. Create an Azure Databricks workspace and cluster
+2. Create a new Databricks notebook
+3. Create a general purpose Azure Storage account
+4. Provision an Azure SQL Data Warehouse
+5. You uploaded the files as described in [Upload files directly into Azure Databricks tables](#upload-files-directly-into-azure-databricks-tables).
 
 There are two pre-requisites for connecting Azure Databricks with SQL Data Warehouse that apply to the SQL Data Warehouse:
 
-    1. You need to [create a database master key](https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/create-a-database-master-key) for the Azure SQL Data Warehouse
-    2. You need to ensure that the [Firewall](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-firewall-configure#manage-firewall-rules-using-the-azure-portal) on the Azure SQL Server that contains your SQL Data Warehouse is configured to allow Azure services to connect (e.g., Allow access to Azure services is set to On).
+1. You need to [create a database master key](https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/create-a-database-master-key) for the Azure SQL Data Warehouse
+2. You need to ensure that the [Firewall](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-firewall-configure#manage-firewall-rules-using-the-azure-portal) on the Azure SQL Server that contains your SQL Data Warehouse is configured to allow Azure services to connect (e.g., Allow access to Azure services is set to On).
 
 Azure Storage Blobs are used as the intermediary for the exchange of data between Azure Databricks and Azure SQL Data Warehouse. As a result of this, you will need to:
 
-    1. Acquire the Account Name and Account Key for that Storage Account
-    2. Create a container that will be used to store data used during the exchange (this must exists before you run any queries against SQL DW)
+1. Acquire the Account Name and Account Key for that Storage Account
+2. Create a container that will be used to store data used during the exchange (this must exists before you run any queries against SQL DW)
 
 ### Enabling Storage account access
 
@@ -383,16 +442,16 @@ In the steps above learned how to [mount a Blob storage account](#mount-azure-bl
     sql_dw_connection_string = "jdbc:sqlserver://databrick-demo-dw.database.windows.net:1433;database=databricks-sqldw;user=demouser@databrick-demo-dw;password=Abc!1234567890;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
     ```
 
-4. You are now going to read data from the `factinternetsales` table you created in the [Upload files directly into Azure Databricks tables](#upload-files-directly-into-azure-databricks-tables) section above. Add a new cell to your notebook, and run the following to create a DataFrame from the data in the CSV file:
+4. You are now going to read data from the `flight_delays_with_airport_codes` Databricks table you created in the [Upload files directly into Azure Databricks tables](#upload-files-directly-into-azure-databricks-tables) section above. Add a new cell to your notebook, and run the following to create a DataFrame from the data in the CSV file:
 
     ```python
-    df = spark.sql("SELECT * FROM FactInternetSales")
+    df = spark.sql("SELECT * FROM flight_delays_with_airport_codes")
     ```
 
 5. Insert another cell, and add the following code to create a new table in your SQL Data Warehouse from the DataFrame you created in the previous step. Be sure to replace `storage_account_name` and `storage_container_name` with appropriate values for your Blob storage account.
 
     ```python
-    new_table_name = "FactInternetSales"
+    new_table_name = "flight_delays_with_airport_codes"
     temp_dir_url = "wasbs://{}@{}.blob.core.windows.net/".format(storage_container_name, storage_account_name)
 
     df.write \
@@ -407,7 +466,7 @@ In the steps above learned how to [mount a Blob storage account](#mount-azure-bl
 6. With a table and data now in the SQL Data Warehouse, you can query directly against it, as follows:
 
     ```python
-    query = "SELECT * FROM FactInternetSales"
+    query = "SELECT * FROM flight_delays_with_airport_codes"
 
     df = spark.read \
       .format("com.databricks.spark.sqldw") \
@@ -419,17 +478,6 @@ In the steps above learned how to [mount a Blob storage account](#mount-azure-bl
 
     display(df)
     ```
-
-7. Once you have the data in a DataFrame, you can query against it as you would any other DataFrame, including visualizing it as follows:
-
-    ```python
-    summary = df.select("ExtendedAmount")
-    display(summary)
-    ```
-
-8. Select the Chart icon, and select a bar below the output table to see a graphical representation of the summary data.
-
-    ![A bar chart visualization is displayed for the data in the above query.](media/azure-databricks-notebook-visualization-bar-chart.png "Bar chart visualization")
 
 > If you are following along in the walk-through, we are done with Azure SQL Data Warehouse for this article, so it is recommended that you pause or delete your Azure SQL Data Warehouse instance to save on costs.
 
