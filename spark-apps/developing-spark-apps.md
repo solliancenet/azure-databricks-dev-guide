@@ -72,7 +72,7 @@ You can learn how to configure your clusters to use Databricks Cache in the Spar
 
 A travel agency wants to provide on-demand flight delay predictions to their customers, based on the origin and destination airports, travel date, and weather forecast. They have obtained decades of flight delay information and historic weather records at airports around the United States. They wish to import, analyze, join the data sets, and prepare the data so they can build and train a machine learning model. Ultimately, the model will be operationalized for on-demand and batch scoring. For now, they want to get started with data preparation and training a machine learning model.
 
-**Note:** If you wish to follow along, you will need to first follow the instructions in the [Data Sources](../data-sources/data-sources-overview.md) article for importing data into Azure Databricks tables.
+**Note:** If you wish to follow along, you will need to first follow the instructions in the [Data Sources](../data-sources/data-sources-overview.md#upload-files-directly-into-azure-databricks-tables) article for importing data into Azure Databricks tables.
 
 ## Code walkthrough
 
