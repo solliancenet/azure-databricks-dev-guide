@@ -26,6 +26,48 @@ The great thing about Databricks notebooks is that you can **use several languag
 
 **Note:** In our sample below, you will see language switching in action. Although the primary language of the notebook is Python, we oftentimes use SQL (`%sql`), and use R (`%r`) for some very helpful data transformation functions.
 
+## Overhead considerations
+
+When developing Spark apps, there are some general guidelines to keep in mind to help reduce overhead and improve performance.
+
+One way to do this is to select the appropriate data abstraction for your needs. Spark 1.x uses RDDs to abstract data, and then Spark 2.x introduced DataFrames and DataSets. Consider the following relative merits:
+
+- **DataFrames**
+  - Best choice in most situations
+  - Provides query optimization through Catalyst
+  - Whole-stage code generation
+  - Direct memory access
+  - Low garbage collection (GC) overhead
+  - Not as developer-friendly as DataSets, as there are no compile-time checks or domain object programming
+- **DataSets**
+  - Good in complex ETL pipelines where the performance impact is acceptable
+  - Not good in aggregations where the performance impact can be considerable
+  - Provides query optimization through Catalyst
+  - Developer-friendly by providing domain object programming and compile-time checks
+  - Adds serialization/deserialization overhead
+  - High GC overhead
+  - Breaks whole-stage code generation
+- **RDDs**
+  - In Spark 2.x, you do not need to use RDDs, unless you need to build a new custom RDD
+  - No query optimization through Catalyst
+  - No whole-stage code generation
+  - High GC overhead
+  - Must use Spark 1.x legacy APIs
+
+### Use optimal data format
+
+Spark supports many formats, such as csv, json, xml, parquet, orc, and avro. Spark can be extended to support many more formats with external data sources - for more information, see [Spark packages](https://spark-packages.org).
+
+The best format for performance is parquet with _snappy compression_, which is the default in Spark 2.x. Parquet stores data in columnar format, and is highly optimized in Spark.
+
+### Use the cache
+
+Spark provides its own native caching mechanisms, which can be used through different methods such as `.persist()`, `.cache()`, and `CACHE TABLE`. This native caching is effective with small data sets as well as in ETL pipelines where you need to cache intermediate results. However, Spark native caching currently does not work well with partitioning, since a cached table does not retain the partitioning data. Also, it requires explicit caching. That is, you need to instruct Spark exactly what files to cache and when to do it.
+
+A better caching option is the newer Databricks Cache. This Databricks Runtime feature can improve the scan speed of your Apache Spark workloads by up to 10x without any application code change. It does this by automatically caching hot input data for a user and load balances across a cluster. It is also capable of caching 30 times more data than Spark's in-memory cache. The other benefit here is removing the explicit caching requirement, making the caching of data more seamless to all users of notebooks, not just developers.
+
+You can learn how to configure your clusters to use Databricks Cache in the Spark Config section of the [Advanced settings & configuration article](../advanced-settings-config/advanced-cluster-settings-configuration.md#spark-config).
+
 ## The sample scenario
 
 A travel agency wants to provide on-demand flight delay predictions to their customers, based on the origin and destination airports, travel date, and weather forecast. They have obtained decades of flight delay information and historic weather records at airports around the United States. They wish to import, analyze, join the data sets, and prepare the data so they can build and train a machine learning model. Ultimately, the model will be operationalized for on-demand and batch scoring. For now, they want to get started with data preparation and training a machine learning model.

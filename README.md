@@ -6,13 +6,13 @@ Description
 
 ## [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
 
-# [Core Scenarios](./core-scenarios/README.md)
+# Core Scenarios
 
-## Machine learning and advanced analytics
+## [Machine learning and advanced analytics](./core-scenarios/machine-learning-advanced-analytics.md)
 
-## Modern data warehouse
+## [Modern data warehouse](./core-scenarios/modern-data-warehouse.md)
 
-## Real-time streaming
+## [Real-time streaming](./core-scenarios/real-time-streaming.md)
 
 # [Azure Databricks architecture](./architecture/azure-databricks-architecture.md)
 
@@ -26,9 +26,9 @@ Description
 
 # [Business intelligence and data visualization](./business-intelligence-datavis/bi-and-datavis.md)
 
-# [Jobs](./jobs/README.md)
+# Jobs
 
-# [Azure Databricks Delta](./delta/README.md)
+# Azure Databricks Delta
 
 ## What and why
 
@@ -36,45 +36,41 @@ Description
 
 ## Benefits of Delta
 
-## [Automation and orchestration](./automation-orchestration/README.md)
+## [Automation and orchestration](./automation-orchestration/overview.md)
 
-## REST API
+## [REST API](./automation-orchestration/rest-api.md)
 
-## CLI
+## [Databricks CLI](./automation-orchestration/databricks-cli.md)
 
-## Azure Data Factory (./automation-orchestration/azure-data-factory.md)
+## [Azure Data Factory](./automation-orchestration/azure-data-factory.md)
 
-## Apache Airflow (./automation-orchestration/apache-airflow.md)
+## [Apache Airflow](./automation-orchestration/apache-airflow.md)
 
 # [Creating and using 3rd-party and local libraries](./libraries/third-party-and-local-libraries.md)
 
 # [Developing Spark apps](./spark-apps/developing-spark-apps.md)
 
-# [Developing Spark structured streaming apps](./structured-streaming/README.md)
+# Developing Spark structured streaming apps
 
-# [Advanced settings and configuration](./advanced-settings-config/README.md)
+# [Advanced settings and configuration](./advanced-settings-config/advanced-cluster-settings-configuration.md)
 
-## External metastore
+## [Spark Config](./advanced-settings-config/advanced-cluster-settings-configuration.md#spark-config)
 
-## Tagging – workspace and cluster
+## [Logging](./advanced-settings-config/advanced-cluster-settings-configuration.md#logging)
 
-## Logging
+## [Cluster tags](./advanced-settings-config/advanced-cluster-settings-configuration.md#cluster-tags)
 
-## Spark config
+## [External Hive Metastore](./advanced-settings-config/advanced-cluster-settings-configuration.md#external-hive-metastore)
 
-# [Security and network](./security-network/README.md)
+# [Security and network](./security-network/security-network.md)
 
-## Perimeter security
+# [User management](./user-management/1_manage-users.md)
 
-## VNET Peering
-
-## On-premises connectivity
-
-# [User management](./user-management/README.md)
+# [Manage Azure Databricks Access Control](./user-management/2_manage-access.md)
 
 # [Data sources](./data-sources/data-sources-overview.md)
 
-# [Solution-oriented scenario guidance](./solution-oriented-scenarios/README.md)
+# Solution-oriented scenario guidance
 
 ## Machine learning
 
@@ -86,6 +82,6 @@ Description
 
 ## MDW
 
-# [Troubleshooting](./troubleshooting/README.md)
+# Troubleshooting
 
-# [Performance tuning](./performance-tuning/README.md)
+# Performance tuning
