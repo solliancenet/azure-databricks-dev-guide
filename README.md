@@ -8,11 +8,11 @@ Description
 
 # Core Scenarios
 
-## Machine learning and advanced analytics
+## [Machine learning and advanced analytics](./core-scenarios/machine-learning-advanced-analytics.md)
 
-## Modern data warehouse
+## [Modern data warehouse](./core-scenarios/modern-data-warehouse.md)
 
-## Real-time streaming
+## [Real-time streaming](./core-scenarios/real-time-streaming.md)
 
 # [Azure Databricks architecture](./architecture/azure-databricks-architecture.md)
 
@@ -62,15 +62,11 @@ Description
 
 ## [External Hive Metastore](./advanced-settings-config/advanced-cluster-settings-configuration.md#external-hive-metastore)
 
-# Security and network
+# [Security and network](./security-network/security-network.md)
 
-## Perimeter security
+# [User management](./user-management/1_manage-users.md)
 
-## VNET Peering
-
-## On-premises connectivity
-
-# User management
+# [Manage Azure Databricks Access Control](./user-management/2_manage-access.md)
 
 # [Data sources](./data-sources/data-sources-overview.md)
 
