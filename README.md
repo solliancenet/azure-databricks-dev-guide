@@ -8,11 +8,11 @@ Description
 
 # Core Scenarios
 
-## Machine learning and advanced analytics
+## [Machine learning and advanced analytics](./core-scenarios/machine-learning-advanced-analytics.md)
 
-## Modern data warehouse
+## [Modern data warehouse](./core-scenarios/modern-data-warehouse.md)
 
-## Real-time streaming
+## [Real-time streaming](./core-scenarios/real-time-streaming.md)
 
 # [Azure Databricks architecture](./architecture/azure-databricks-architecture.md)
 
