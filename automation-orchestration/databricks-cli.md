@@ -60,21 +60,21 @@ docker run -it databricks-cli fs --help
 
 4.  Create a virtual environment in which you can install the Databricks CLI. In the snippet below, you create a virtual environment called `databrickscli`.
 
-    virtualenv -p /usr/bin/python2.7 databrickscli
+    `virtualenv -p /usr/bin/python2.7 databrickscli`
 
 5.  Switch to the virtual environment you created.
 
-    source databrickscli/bin/activate
+    `source databrickscli/bin/activate`
 
     ![Screenshot shows the virtual environment activated within Cloud Shell](media/azure-cloud-shell-virtual-environment.png 'Virtual Environment activated')
 
 6.  Install the Databricks CLI.
 
-    pip install databricks-cli
+    `pip install databricks-cli`
 
 7.  Set up authentication with Databricks by using the access token that you must have created, listed as part of prerequisites. Use the following command:
 
-    databricks configure --token
+    `databricks configure --token`
 
     You will receive the following prompts:
 
