@@ -62,15 +62,11 @@ Description
 
 ## [External Hive Metastore](./advanced-settings-config/advanced-cluster-settings-configuration.md#external-hive-metastore)
 
-# Security and network
+# [Security and network](./security-network/security-network.md)
 
-## Perimeter security
+# [User management](./user-management/1_manage-users.md)
 
-## VNET Peering
-
-## On-premises connectivity
-
-# User management
+# [Manage Azure Databricks Access Control](./user-management/2_manage-access.md)
 
 # [Data sources](./data-sources/data-sources-overview.md)
 
