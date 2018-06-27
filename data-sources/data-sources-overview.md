@@ -400,7 +400,7 @@ Azure Cosmos DB is well-suited for IoT, gaming, retail, and operational logging 
 - Stream processing for IoT or performing analytics.
 - Additional data movement by synchronizing with a cache, search engine, or data warehouse, or archiving data to cold storage.
 
-The **change feed** support in Azure Cosmos DB enables you to build efficient and scalable solutions for each of these patterns.
+The [change feed support in Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed) enables you to build efficient and scalable solutions for each of these patterns.
 
 It is possible to read the change feed from your Azure Databricks notebook, as shown below.
 
