@@ -78,7 +78,7 @@ password dapi6c3b0a25824ee4c246d851e672383a69
 
 To request cluster information from REST API 2.0, we issue a simple GET request with cURL. Notice that `-n` is being used to tell cURL to use `.netrc`:
 
-```
+```shell
 curl -n https://<databricks-instance>/api/2.0/clusters/get?cluster_id=<cluster-id>
 ```
 
