@@ -392,6 +392,57 @@ To write to the Cosmos DB, do the following:
 
     ![The newly inserted airport code is highlighted in the query results.](media/cosmos-db-upsert-query-results.png "Query results")
 
+### Reading the Azure Cosmos DB change feed
+
+Azure Cosmos DB is well-suited for IoT, gaming, retail, and operational logging applications. A common design pattern in these applications is to use changes to the data to kick off additional actions. These additional actions could be any of the following:
+
+- Triggering a notification or a call to an API when a document is inserted or modified.
+- Stream processing for IoT or performing analytics.
+- Additional data movement by synchronizing with a cache, search engine, or data warehouse, or archiving data to cold storage.
+
+The **change feed** support in Azure Cosmos DB enables you to build efficient and scalable solutions for each of these patterns.
+
+It is possible to read the change feed from your Azure Databricks notebook, as shown below.
+
+1. First, create a shared folder in your workspace which will act as the change feed checkpoint location. Select **Workspace** from the left-hand menu, select the drop down arrow next to Workspace, and then select **Create > Folder**.
+
+    ![Create a new folder through the Workspace menu.](media/databricks-workspace-create-folder.png "Workspace create folder")
+
+2. Name the folder **CosmosChangeFeed** and select **Create**.
+
+3. Now, return to your notebook, and add the following code into a new cell, updating the tokenized values as appropriate. Note the `ReadChangeFeed` parameter in the config.
+
+    ```python
+    # Adding variables
+    rollingChangeFeed = False
+    startFromTheBeginning = False
+    useNextToken = True
+
+    changeFeedConfig = {
+      "Endpoint" : "https://<your-cosmos-db>.documents.azure.com:443/",
+      "Masterkey" : "<your-master-key>",
+      "Database" : "demo",
+      "Collection" : "airport_code_location_lookup",
+      "ReadChangeFeed" : "true",
+      "ChangeFeedQueryName" : str(rollingChangeFeed) + str(startFromTheBeginning) + str(useNextToken),
+      "ChangeFeedStartFromTheBeginning" : str(startFromTheBeginning),
+      "ChangeFeedUseNextToken" : str(useNextToken),
+      "RollingChangeFeed" : str(rollingChangeFeed),
+      "ChangeFeedCheckpointLocation" : "/CosmosChangeFeed/changefeedcheckpointlocation",
+      "SamplingRatio" : "1.0"
+    }
+
+    newAirportCodes = spark.read.format("com.microsoft.azure.cosmosdb.spark").options(**changeFeedConfig).load()
+    ```
+
+4. Insert another cell, and add the following code to show the contents of the change feed. 
+
+    ```python
+    newAirportCodes.show()
+    ```
+
+    > If the change feed is empty, you can return to step 6 under Write data to Cosmos DV above, change the `AIRPORT` value of the new row you inserted and run the query again to force changes into the feed, then rerun this code again.
+
 > If you are following along in the walk-through, we are done with Azure Cosmos DB for this article, so it is recommended that you delete your Azure Cosmos DB instance to save on costs.
 
 ## SQL Data Warehouse
