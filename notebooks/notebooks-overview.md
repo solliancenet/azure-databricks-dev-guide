@@ -136,6 +136,12 @@ import json
 print(json.loads(result))
 ```
 
+### Visualizations
+
+Cells returning tabular data support a number of visualizations out of the box. All notebooks, regardless of their language, support Databricks visualization using the `display` function. The display function includes support for visualizing multiple data types. As opposed to the handful of basic visualizations that other notebook engines provide, Azure Databricks includes several out of the box that you traditionally would need to rely on an external library such as `matplotlib` to obtain. However, if you wish to use external libraries to augment the default ones, you are free to do so. You can learn more about using visualizations the [Business Intelligence and Visualization](../business-intelligence-datavis/bi-and-datavis.md) article.
+
+![Databricks notebooks visualization options](media/azure-databricks-visualizations.png "Visualization options")
+
 ### Package Cells
 
 Package cells are special cells that get compiled when executed. These cells have no visibility with respect to the rest of the notebook, and they are essentially considered as separate Scala files. If you wish to use custom classes and/or objects defined within notebooks reliably in Spark, and across notebook sessions, you must use package cells to define those classes.
