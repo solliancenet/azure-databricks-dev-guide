@@ -26,7 +26,7 @@ Description
 
 # [Business intelligence and data visualization](./business-intelligence-datavis/bi-and-datavis.md)
 
-# Jobs
+# [Jobs](./jobs/jobs-overview.md)
 
 # Azure Databricks Delta
 
