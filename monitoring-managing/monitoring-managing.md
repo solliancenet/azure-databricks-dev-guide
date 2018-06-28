@@ -1,5 +1,66 @@
 # Monitoring and Managing Azure DataBricks
 
+Managing your Azure DataBricks instances includes a number of monitoring tasks, including the following:  
+
+ - **Cluster Configuration Monitoring** - You will want to set up monitoring so that you gets alterts if cluster configuration drift occurs.  Azure DataBricks cluster instances include both standard and advanced configuation settings.  See  [cluster configuration](../configuration/clusters.md) for more detail.   If overall cluster workload requires you to increase cluster resources (DBUs), you'll want to consider re-configuration, including forecasting projected service costs. Review Azure Databricks DBU pricing by feature to best fit your workloads.  
+
+ - **Cluster Job Monitoring** - You will want to monitor to be alterted on non-standard job executions. Non-standard job runs include failed jobs, long-running jobs and jobs which consume cluster resources above defined threshholds. See  [jobs-overview](../jobs/job-overview.md) for more detail
+
+ ## Common Scenarios
+
+The folowing common cluster configurations are provided for your refence in implementing and managing clusters and associated jobs:
+
+ - Scenario 1: Generic usage across organization or larger groups (data analysts creating dashboards)
+ - Scenario 2: Specialized use case or user groups within the organization (data scientists running explorations)
+ - Scenario 3: Scheduled batch workloads (data engineers running ETL jobs)
+ - Scenario 4: Cloning clusters (for administrators)
+
+### Scenario 1: Generic usage across organization or larger groups (data analysts creating dashboards)
+Suppose you need to provide a large group of users access to data for running ad-hoc queries (mostly SQL based). The cluster usage varies a lot between day to day and very few jobs are super intensive. The users mostly have read-only access to the data and most likely want to create dashboards from the different datasets through an easy and intuitive notebook interface.
+
+![1](media/scenario-1.png)  
+The best approach for cluster provisioning under these circumstances is to use a hybrid approach for node provisioning in the cluster along with autoscaling. A hybrid approach involves defining the number of  instances to make up the cluster and then enabling autoscaling between the min and max number of instances.This cluster is always (24/7) on, shared by the users belonging to the group by default and scales up/down depending upon the load. The users do not have access to start/stop the cluster.
+
+The initial instances are around to immediately respond to user queries for better usability. If the user query requires more capacity, autoscaling kicks in and provisions more nodes (or instances) to deal with the workload.
+
+Databricks has other features to further improve this use case around multi-tenancy:
+
+ - Handling Large Queries in Interactive Workflows - Automatically manages queries that will never finish.
+ - Task Preemption for High Concurrency - Improves how long running jobs and shorter jobs work together.
+ - Autoscaling local storage - Prevents running out of storage space(shuffle) in a multi-tenant environment.
+
+This approach keeps the overall cost down by:
+ - Using a shared cluster model.
+ - Using a a flexible amount of instances (or DBUs).
+ - Using autoscaling instead of a fixed-size cluster and avoid paying for underutilized cluster time.
+
+### Scenario 2: Specialized use case or user groups within the organization (data scientists running explorations)
+This scenario is for specialized use cases and groups within the organization. For example, data scientists running intensive exploration and machine learning algorithms requiring special libraries to be installed on the cluster, and so on.
+
+![2](media/scenario-2.png)  
+
+A typical user will run some intensive data operations for a short period of time and then want to get rid of the cluster.
+
+The best approach for this kind of workload is to have the Databricks admin create a cluster with pre-defined configuration (number of instances, type of instances, libraries to be installed, and so on) but allowing the users to start and stop the cluster using the Start Cluster feature. As an additional cost savings, the administrator can also enable the Auto Termination feature for these clusters based on some idle conditions (for example, a time based condition would be terminate the cluster if idle for more than an hour).  
+
+This approach provides more control to users in terms of spinning up the clusters, but still provides the ability to keep the cost under control by pre-defining the configurations. For example, the administrator could decide to have a particular instance size for the cluster for data exploration use cases with auto termination enabled. This approach also allows the admin to configure different clusters for different groups of users with separate access permissions to different set of data using fine-grained permissions.
+
+One downside to this approach is that users must involve the administrator for any changes to configuration, libraries, and so on, to the clusters.
+
+### Scenario 3: Scheduled batch workloads (data engineers running ETL jobs)
+This scenario involves running batch job JARs and notebooks on a regular cadence through the Databricks platform.
+
+The suggested best practice is to launch a new cluster for each run of critical jobs. This helps avoid any issues (failures, missing SLA, and so on) due to an existing workload (noisy neighbor) on a shared cluster. Depending on the level of criticality for the job you could go full on-demand (to meet SLAs) or even balance between spot and on-demand instances (with Spot fall back to On-demand option enabled for the cluster) for some cost savings.
+
+![3](media/scenario-3.png)  
+
+For non-critical example dashboard type jobs, you could use a shared cluster instead of provisioning a new cluster for each run.
+
+### Scenario 4: Cloning clusters (for administrators)
+The ability to clone clusters provides a convenient way for administrators to create a duplicate of an existing cluster retaining the same configurations, libraries, and so on. This allows the administrators to quickly provision identical clusters for each user or user group with similar configuration requirements. This feature provides a pseudo-templating capability and over time makes maintaining the configurations for different user and groups more convenient.
+
+
+ 
 ## Monitoring with Metrics
 Metrics help you monitor the performance of Azure Databricks clusters.
 
@@ -70,3 +131,4 @@ These gets entered into the spark_url parameter of the config as shown below:
 ### Additonal Links
 
 - [Azure Databricks Metrics](https://docs.azuredatabricks.net/user-guide/clusters/metrics.html)
+- [Azure Databricks Pricing](https://databricks.com/product/azure-pricing)
