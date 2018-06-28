@@ -50,7 +50,7 @@ Description
 
 # [Developing Spark apps](./spark-apps/developing-spark-apps.md)
 
-# Developing Spark structured streaming apps
+# [Developing Spark structured streaming apps](structured-streaming-apps/structured-streaming.md)
 
 # [Advanced settings and configuration](./advanced-settings-config/advanced-cluster-settings-configuration.md)
 
