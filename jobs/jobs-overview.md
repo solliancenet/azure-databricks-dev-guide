@@ -62,7 +62,7 @@ There are a few caveats you need to be aware of when you run a JAR job:
 
 - **Do not** call `System.exit(0)` or `sc.stop()` at the end of your `Main` program. This can cause unexpected behavior.
 
-##### Library dependencies
+#### Library dependencies
 
 The Spark driver for Databricks has certain library dependencies that cannot be overridden. These libraries will take priority over any of your own libraries that conflict with them. A good rule of thumb when dealing with library dependencies while creating JARs for jobs is to list Spark and Hadoop as provided dependencies. On Maven, add Spark and/or Hadoop as provided dependencies as shown below.
 
