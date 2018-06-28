@@ -74,7 +74,7 @@ The final step is a summary where you confirm your settings.
 
 [3] The ability to [automatically terminate](https://docs.azuredatabricks.net/user-guide/clusters/terminate.html#automatic-termination) the cluster after a period of inactivity is also a cost-savings benefit, because you don't pay for a cluster while it's terminated. Terminating a cluster can be thought of as pausing. Its configuration is stored so that it can be reused at a later time. With HDInsight, there is no ability to pause a cluster. You must delete it if you are not going to use it for a while, otherwise you will pay for every minute it exists. You can persist data between deleting and recreating HDInsight clusters by defining an [external Hive or Oozie metastore](https://docs.microsoft.com/azure/hdinsight/hdinsight-use-external-metadata-stores).
 
-[4] Azure Databricks [jobs](https://docs.azuredatabricks.net/user-guide/jobs.html#id1) provide a way to run a notebook or JAR either on-demand or on a schedule. There are several parameters you an set, such as the number of retries after failures, how many concurrent jobs can run, alerts, setting dependencies, and a run schedule.
+[4] Azure Databricks [jobs](https://docs.azuredatabricks.net/user-guide/jobs.html#id1) provide a way to run a notebook or JAR either on-demand or on a schedule. There are several parameters you can set, such as the number of retries after failures, how many concurrent jobs can run, alerts, setting dependencies, and a run schedule.
 
 ![Screenshot of the Jobs page showing a grid with a list of jobs](media/databricks-jobs-list.png 'Jobs page')
 
