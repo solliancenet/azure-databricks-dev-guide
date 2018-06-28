@@ -20,7 +20,7 @@ Description
 
 # [Configuring the cluster](./configuration/README.md)
 
-# [Monitoring & managing the cluster](./monitoring-managing/README.md)
+# [Monitoring & managing the cluster](./monitoring-managing/monitoring-managing.md)
 
 # [Notebooks](./notebooks/notebooks-overview.md)
 

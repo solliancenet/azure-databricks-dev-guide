@@ -1,6 +1,6 @@
 # Monitoring and Managing Azure DataBricks
 
-## Metrics
+## Monitoring with Metrics
 Metrics help you monitor the performance of Azure Databricks clusters.
 
 You can install [Datadog agents](https://www.datadoghq.com/) on you cluster nodes to send Datadog metrics to your Datadog account. This topic includes notebooks that install Datadog agents on Databricks clusters.
