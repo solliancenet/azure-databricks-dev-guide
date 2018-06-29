@@ -653,3 +653,7 @@ If you successfully completed this step-by-step walkthrough of creating a non-tr
 # Load the saved pipeline model
 model = PipelineModel.load("/dbfs/FileStore/models/pipelineModel")
 ```
+
+## Next Steps
+
+Read next: [Developing Spark Structured Streaming Apps](../structured-streaming-apps/structured-streaming.md)

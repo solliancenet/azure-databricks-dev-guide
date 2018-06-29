@@ -334,6 +334,6 @@ group by p.date;
 
 The command took just over **5 seconds** to complete.
 
-## Next steps
+## Next Steps
 
-Learn about [troubleshooting](../troubleshooting/troubleshooting-and-debugging.md) and debugging your clusters.
+Read next: [Troubleshooting](../troubleshooting/troubleshooting-and-debugging.md)
