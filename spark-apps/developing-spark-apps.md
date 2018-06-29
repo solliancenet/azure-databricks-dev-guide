@@ -64,9 +64,9 @@ The best format for performance is parquet with _snappy compression_, which is t
 
 Spark provides its own native caching mechanisms, which can be used through different methods such as `.persist()`, `.cache()`, and `CACHE TABLE`. This native caching is effective with small data sets as well as in ETL pipelines where you need to cache intermediate results. However, Spark native caching currently does not work well with partitioning, since a cached table does not retain the partitioning data. Also, it requires explicit caching. That is, you need to instruct Spark exactly what files to cache and when to do it.
 
-A better caching option is the newer Databricks Cache. This Databricks Runtime feature can improve the scan speed of your Apache Spark workloads by up to 10x without any application code change. It does this by automatically caching hot input data for a user and load balances across a cluster. It is also capable of caching 30 times more data than Spark's in-memory cache. The other benefit here is removing the explicit caching requirement, making the caching of data more seamless to all users of notebooks, not just developers.
+A better caching option is the newer Databricks IO Cache. This Databricks Runtime feature can improve the scan speed of your Apache Spark workloads by up to 10x without any application code change. It does this by automatically caching hot input data for a user and load balances across a cluster. It is also capable of caching 30 times more data than Spark's in-memory cache. The other benefit here is removing the explicit caching requirement, making the caching of data more seamless to all users of notebooks, not just developers.
 
-You can learn how to configure your clusters to use Databricks Cache in the Spark Config section of the [Advanced settings & configuration article](../advanced-settings-config/advanced-cluster-settings-configuration.md#spark-config).
+You can learn how to configure your clusters to use Databricks IO Cache in the Spark Config section of the [Advanced settings & configuration article](../advanced-settings-config/advanced-cluster-settings-configuration.md#spark-config).
 
 ## The sample scenario
 
