@@ -84,4 +84,4 @@ Description
 
 # Troubleshooting
 
-# Performance tuning
+# [Performance tuning](./performance-tuning/performance-tuning.md)
