@@ -300,3 +300,8 @@ Jobs have tight integration with Structured Streaming APIs and can monitor all s
 
 - [Structured Streaming In Apache Spark](https://databricks.com/blog/2016/07/28/structured-streaming-in-apache-spark.html)
 - [Tutorial: Stream data into Azure Databricks using Event Hubs](https://docs.microsoft.com/en-us/azure/azure-databricks/databricks-stream-from-eventhubs)
+- [Structured Streaming + Kafka integration guide](https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html)
+
+## Next steps
+
+Read next: [Advanced settings & configuration](../advanced-settings-config/advanced-cluster-settings-configuration.md)
