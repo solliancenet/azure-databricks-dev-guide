@@ -120,8 +120,6 @@ In order to reach Event Hubs, you will need to obtain the connection string for 
 9. The next thing you will do is use Azure Databricks to send a few events to your Event Hub, so you have data to read from your streaming query. Insert a new cell, and add the following. This code adds new rows to a DataFrame.
 
     ```python
-    checkpointLocation = "///checkpoint.txt"
-
     # Add rows to send to Event Hub
     newRows = [
       Row("This is new message #1!", None, None),
@@ -142,8 +140,8 @@ In order to reach Event Hubs, you will need to obtain the connection string for 
       .select("body") \
       .write \
       .format("eventhubs") \
-      .options(**ehWriteConf) \
-      .option("checkpointLocation", checkpointLocation) \
+      .options(**eventHubsConfig) \
+      .option("checkpointLocation", "///checkpoint.txt") \
       .save()
     ```
 
