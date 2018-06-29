@@ -63,10 +63,6 @@ For reference, the Spark memory structure and some key executor memory parameter
 
 #### Spark Memory
 
-If you are using YARN, then YARN controls the maximum sum of memory used by the containers on each Spark node. The graphic below shows the key objects and relationship between them.
-
-![YARN Spark Memory Management](./media/hdinsight-spark-perf/yarn-spark-memory.png)
-
 Here are set of common practices you can try if you are addressing 'out of memory' messages:
 
 - Review DAG Management Shuffles -> reduce by map-side reducting, pre-partition (or bucketize) source data, maximize single shuffle, reduce the amount of data sent
