@@ -82,6 +82,6 @@ Description
 
 ## MDW
 
-# Troubleshooting
+# [Troubleshooting](./troubleshooting/troubleshooting-and-debugging.md)
 
 # [Performance tuning](./performance-tuning/performance-tuning.md)
