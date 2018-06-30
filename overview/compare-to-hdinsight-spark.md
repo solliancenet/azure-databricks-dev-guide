@@ -217,3 +217,7 @@ or with SQL syntax:
 ```sql
 CREATE TABLE <example-table>(id STRING, value STRING) USING org.apache.spark.sql.parquet OPTIONS (path '<your-storage-path>')
 ```
+
+## Next Steps
+
+Read next: [Core scenarios introduction](../core-scenarios/README.md)

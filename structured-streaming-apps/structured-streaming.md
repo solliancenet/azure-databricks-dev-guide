@@ -120,8 +120,6 @@ In order to reach Event Hubs, you will need to obtain the connection string for 
 9. The next thing you will do is use Azure Databricks to send a few events to your Event Hub, so you have data to read from your streaming query. Insert a new cell, and add the following. This code adds new rows to a DataFrame.
 
     ```python
-    checkpointLocation = "///checkpoint.txt"
-
     # Add rows to send to Event Hub
     newRows = [
       Row("This is new message #1!", None, None),
@@ -142,8 +140,8 @@ In order to reach Event Hubs, you will need to obtain the connection string for 
       .select("body") \
       .write \
       .format("eventhubs") \
-      .options(**ehWriteConf) \
-      .option("checkpointLocation", checkpointLocation) \
+      .options(**eventHubsConfig) \
+      .option("checkpointLocation", "///checkpoint.txt") \
       .save()
     ```
 
@@ -300,3 +298,8 @@ Jobs have tight integration with Structured Streaming APIs and can monitor all s
 
 - [Structured Streaming In Apache Spark](https://databricks.com/blog/2016/07/28/structured-streaming-in-apache-spark.html)
 - [Tutorial: Stream data into Azure Databricks using Event Hubs](https://docs.microsoft.com/en-us/azure/azure-databricks/databricks-stream-from-eventhubs)
+- [Structured Streaming + Kafka integration guide](https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html)
+
+## Next steps
+
+Read next: [Advanced settings & configuration](../advanced-settings-config/advanced-cluster-settings-configuration.md)
