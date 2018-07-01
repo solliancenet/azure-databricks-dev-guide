@@ -28,7 +28,7 @@
 
 # [Azure Databricks Delta](./delta/databricks-delta-overview.md)
 
-## [Automation and orchestration](./automation-orchestration/overview.md)
+# [Automation and orchestration](./automation-orchestration/overview.md)
 
 ## [REST API](./automation-orchestration/rest-api.md)
 
