@@ -1,7 +1,5 @@
 # Azure Databricks Developer Guide
 
-Description
-
 # [What is Azure Databricks?](./overview/azure-databricks-dev-guide-intro.md)
 
 ## [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
@@ -28,13 +26,7 @@ Description
 
 # [Jobs](./jobs/jobs-overview.md)
 
-# Azure Databricks Delta
-
-## What and why
-
-## Use cases/patterns
-
-## Benefits of Delta
+# [Azure Databricks Delta](./delta/databricks-delta-overview.md)
 
 ## [Automation and orchestration](./automation-orchestration/overview.md)
 
