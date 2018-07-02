@@ -105,7 +105,8 @@ display(delta_updated.filter(delta_updated.Dest == 'PPT'))
 
 Using the `UPDATE` statement, you can apply expressions to change the value of columns, based on a row matching a predicate. For example, you can update the `Dest` value of all flights with a `FlightNum` of 115 and an `Origin` of SFO to be LAX using the following:
 
-```python
+```sql
+%sql
 UPDATE flights SET Dest = 'LAX' WHERE FlightNum = 115 AND Origin = 'SFO'
 ```
 
@@ -115,7 +116,8 @@ Update operations automatically make use of the partitioning of the table when p
 
 The `DELETE` statement allows you to remove data from a Delta table that matches a specified predicate. For example:
 
-```python
+```sql
+%sql
 DELETE FROM flights WHERE FlightNum = 115
 ```
 
