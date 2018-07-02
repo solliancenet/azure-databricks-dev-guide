@@ -36,7 +36,8 @@ The core abstraction of Databricks Delta is a Databricks Delta table, which is a
 Databricks Delta requires Databricks Runtime 4.1 or above. Tables created using Databricks Runtime version lower than 4.1 must have their table protocol upgraded using the following:
 
 ```scala
-%scala com.databricks.delta.Delta.upgradeTableProtocol("</path/to/table>" or "<tableName>")
+%scala
+com.databricks.delta.Delta.upgradeTableProtocol("</path/to/table>" or "<tableName>")
 ```
 
 You can read and write from Databricks Delta tables using the same Apache Spark SQL APIs that you are familiar with for reading and writing data from Hive tables and DBFS directories. With Delta, the transaction log and other enhancements provide the following additional functionality:
@@ -50,76 +51,191 @@ You can read and write from Databricks Delta tables using the same Apache Spark 
 
 To demonstrate how to create a Databricks Delta table, we will use Spark SQL to query the `flights` table created in the [Azure Data Factory](../automation-orchestration/azure-data-factory.md#load-flight-data-from-dbfs) article, and write it to a Delta table using the following code. Note the `format` property is set to `delta` when saving the data to the Delta table.
 
-```python
-flights = spark.sql("SELECT * FROM flights")
-flights.write.format("delta").save("/data/flights")
-```
+1. First, read the data from the `flights` table into a DataFrame and save it to a new directory in `delta` format.
+
+    ```python
+    flights = spark.sql("SELECT * FROM flights")
+    flights.write.format("delta").save("/delta/flights")
+    ```
+
+    > You can optionally specify partition columns when creating a new Databricks Delta table. Partitioning is used to speed up queries or DML that have predicates involving the partition columns. For example, we can partition by `UniqueCarrier` on the flight data: `flights.write.format("delta").partitionBy("UniqueCarrier").save("/delta/events")`
+
+2. Then, you can create a Databricks Delta table that refers to the Databricks Delta directory, so you can easily access the table by name:
+
+    ```python
+    flights.write.format("delta").saveAsTable("flights_delta")
+    ```
+
+    Or, you can use SQL:
+
+    ```sql
+    %sql
+    DROP TABLE IF EXISTS flights_delta;
+    CREATE TABLE flights_delta
+    USING DELTA
+    LOCATION "/delta/flights/"
+    ```
+
+3. You can confirm the table details, and that it was saved as a Delta table by running the following command:
+
+    ```sql
+    %sql DESCRIBE detail flights_delta
+    ```
+
+    ![The results of running a SQL describe statement on the flights_delta table are displayed.](media/databricks-delta-table-details.png "Delta table describe statement")
 
 ### Read from a Delta table
 
-Use the `DataFrameReader` to read data a Delta table into a DataFrame:
+1. Use the `DataFrameReader` to read data from a Delta table into a DataFrame:
 
-```python
-delta = spark.read.format("delta").load("/delta/flights")
-display(delta)
-```
+    ```python
+    delta = spark.read.format("delta").load("/delta/flights")
+    display(delta)
+    ```
 
-The DataFrame returned automatically reads the most recent snapshot of the table for any query; you never need to run `REFRESH TABLE`. Databricks Delta automatically uses partitioning and statistics to read the minimum amount of data when there are applicable predicates in the query.
+    Or from the saved table:
 
-You can optionally specify partition columns when creating a new Databricks Delta table. Partitioning is used to speed up queries or DML that have predicates involving the partition columns. For example, we can partition by `UniqueCarrier` on the flight data:
+    ```python
+    delta = spark.sql("SELECT * FROM flights_delta")
+    display(delta)
+    ```
 
-```python
-flights.write.format("delta").partitionBy("UniqueCarrier").save("/delta/events")
-```
+The DataFrame returned automatically reads the most recent snapshot of the table for any query, so you never need to run `REFRESH TABLE`. Databricks Delta automatically uses partitioning and statistics to read the minimum amount of data when there are applicable predicates in the query.
 
-### Write to a Delta table
+### Insert into a Delta table
 
 Use the `DataFrameWriter` to write data to a Delta table as an atomic operation. You must specify the `delta` format for write operations. If the table already exists, you must also specify `append` for the the `mode` property. Optionally, you can overwrite all the data in the table by setting the `mode` to `overwrite`.
 
-```python
-from pyspark.sql import Row
+1. First, create a new row, and add it to a DataFrame, using the schema from the `delta` DataFrame.
 
-newRows = [
-  Row(2018,12,11,3,"UA",115,"N999EV",0,0,"SFO","PPT",0,"null",0,0)
-]
+    ```python
+    from pyspark.sql import Row
 
-parallelizeRows = spark.sparkContext.parallelize(newRows)
+    newRows = [
+      Row(2018,12,11,3,"UA",115,"N888EV",0,0,"SFO","PPT",0,"null",0,0)
+    ]
 
-# Create a new DataFrame
-new_flights = spark.createDataFrame(parallelizeRows, delta.schema)
+    parallelizeRows = spark.sparkContext.parallelize(newRows)
 
-# Union the new DataFrame with the airport_code_location_lookup DataFrame
-updated_flights = delta.union(new_flights)
+    # Create a new DataFrame
+    new_flights = spark.createDataFrame(parallelizeRows, delta.schema)
+    ```
 
-updated_flights.write.format("delta").mode("append").save("/delta/flights")
-```
+2. Before adding the new record, quickly query to the DataFrame representing the Delta table to verify no records with a `TailNum` of "N888EV" exist.
 
-Now, you can query the Delta table for just the newly inserted row:
+    ```python
+    display(delta.filter(delta.TailNum == "N888EV"))
+    ```
 
-```python
-delta_updated = spark.read.format("delta").load("/delta/flights")
-display(delta_updated.filter(delta_updated.Dest == 'PPT'))
-```
+3. Now, Use the `append` mode to save the inserted records into the Delta table.
+
+    ```python
+    new_flights.write.format("delta").mode("append").save("/delta/flights")
+    ```
+
+    Or, you can save the named table in `append` mode to add in the new records:
+
+    ```python
+    new_flights.write.format("delta").mode("append").saveAsTable("flights_delta")
+    ```
+
+4. Now, you can query the DataFrame representing the Delta table again for `TailNum` "N888EV", and see that the DataFrame attached to the Delta table is automatically updated, since it reads from the specified directory.
+
+    ```python
+    display(delta.filter(delta.TailNum == "N888EV"))
+    ```
+
+    ![Delta table insert results are displayed.](media/databricks-delta-table-insert-results.png "Delta table insert results")
 
 ### Update a Delta table
 
-Using the `UPDATE` statement, you can apply expressions to change the value of columns, based on a row matching a predicate. For example, you can update the `Dest` value of all flights with a `FlightNum` of 115 and an `Origin` of SFO to be LAX using the following:
+Using the `UPDATE` statement, you can apply expressions to change the value of columns, based on a row matching a predicate. To demonstrate, we will update the newly inserted record, with `TailNum` "N888EV".
 
-```sql
-%sql
-UPDATE flights SET Dest = 'LAX' WHERE FlightNum = 115 AND Origin = 'SFO'
-```
+1. For the new record, update the `DepDelay` value to 15 minutes using the following:
+
+    ```sql
+    %sql
+    UPDATE flights_delta SET DepDelay = 15 WHERE TailNum = 'N888EV'
+    ```
+
+2. To verify the update, query the `delta` DataFrame for records matching the predicate, and confirm the `Origin` is now "LAX".
+
+    ```python
+    display(delta.filter(delta.TailNum == "N888EV"))
+    ```
+
+    Or, you can use SQL.
+
+    ```sql
+    %sql
+    SELECT * FROM flights_delta WHERE TailNum = 'N888EV'
+    ```
+
+    ![The results of the above update operation is displayed, with the updated Departure Delay of 15 minutes highlighted.](media/databricks-delta-table-update-results.png "Update table results")
+
+    > NOTE: Unlike working with traditional Databricks tables in Spark, you will notice that when you read data from a DataFrame representing a Databricks Delta table, the DataFrame contains newly inserted and updated rows without needing to read the updated table into a new DataFrame.
 
 Update operations automatically make use of the partitioning of the table when possible. This optimization means that it will be significantly faster to delete data based on partition predicates.
 
+### Upserts with Delta
+
+Unlike working with Spark DataFrames, Delta allows the use of UPSERTS, using the `MERGE INTO` statement. If a record already exists, Databricks Delta will update the row using the specified expression. When no matching record exists, a new row will be inserted.
+
+1. Create a new DataFrame, containing a new record, as well as an updated row for the flight with `TailNum` "N888EV". In this case, we will set the `DepDelay` field back to 0, from the 15 minute delay we set in the update above.
+
+    ```python
+    # Create a new row, plus update the Origin for an existing row (TailNum N888EV).
+    newRows = [
+      Row(2018,12,11,3,"UA",500,"N000EV",0,0,"IND","SFO",0,"null",0,0),
+      Row(2018,12,11,3,"UA",115,"N888EV",0,0,"SFO","PPT",0,"null",0,0)
+    ]
+
+    parallelizeRows = spark.sparkContext.parallelize(newRows)
+
+    # Create a new DataFrame
+    new_flights = spark.createDataFrame(parallelizeRows, delta.schema)
+    # Register the new/updated rows as a temp table
+    new_flights.registerTempTable("updates")
+    ```
+
+2. Run the `MERGE INTO` statement on the `flights_delta` table. You must specify a value for every column in your table when you perform an `INSERT`. However, you do not need to update all values.
+
+    ```sql
+    %sql
+    MERGE INTO flights_delta
+    USING updates
+    ON flights_delta.Year = updates.Year 
+      AND flights_delta.Month = updates.Month 
+      AND flights_delta.DayOfMonth = updates.DayOfMonth
+      AND flights_delta.FlightNum = updates.FlightNum
+      AND flights_delta.TailNum = updates.TailNum
+    WHEN MATCHED THEN
+      UPDATE SET
+        flights_delta.DepDelay = updates.DepDelay
+    WHEN NOT MATCHED THEN
+      INSERT (Year, Month, DayOfMonth, DayOfWeek, UniqueCarrier, FlightNum, TailNum, ArrDelay, DepDelay, Origin, Dest, Cancelled, CancellationCode, CarrierDelay, LateAircraftDelay) VALUES (updates.Year, updates.Month, updates.DayOfMonth, updates.DayOfWeek, updates.UniqueCarrier, updates.FlightNum, updates.TailNum, updates.ArrDelay, updates.DepDelay, updates.Origin, updates.Dest, updates.Cancelled, updates.CancellationCode, updates.CarrierDelay, updates.LateAircraftDelay)
+    ```
+
+    > **IMPORTANT**: `MERGE INTO` requires that the update table is small. If the table is larger than 4.0 GB, you will get an error, such as `SparkException: Exception thrown in Future.get`.  There are no requirements on the destination table size. If your workload does not satisfy this requirement, try using separate `INSERT` and `UPDATE` statements.
+
+3. Run the following query to retrieve the new and updated records from the `delta` DataFrame, noting the `DepDelay` column for `TailNum` "N888EV" is back to 0.
+
+    ```python
+    display(delta.filter((delta.TailNum == "N888EV") | (delta.TailNum == "N000EV")))
+    ```
+
+    ![The results of the Upsert statement above are displayed.](media/databricks-delta-table-upsert-results.png "Upsert results")
+
 ### Delete from a Delta table
 
-The `DELETE` statement allows you to remove data from a Delta table that matches a specified predicate. For example:
+The `DELETE` statement allows you to remove data from a Delta table that matches a specified predicate.
 
-```sql
-%sql
-DELETE FROM flights WHERE FlightNum = 115
-```
+1. Run the following command to remove records from the `flights_delta` Delta table where the `TailNum` is "N888EV".
+
+    ```sql
+    %sql
+    DELETE FROM flights_delta WHERE TailNum = 'N888EV'
+    ```
 
 Delete operations automatically make use of the partitioning of the table when possible. This optimization means that it will be significantly faster to delete data based on partition predicates.
 
