@@ -48,7 +48,7 @@ You can read and write from Databricks Delta tables using the same Apache Spark 
 
 ### Create a Delta table
 
-To demonstrate how to create a Databricks Delta table, we will use Spark SQL to query the `flights` table created in the [Notebooks](../notebooks/notebooks-overview.md) article, and write it to a Delta table using the following code. Note the `format` property is set to `delta` when saving the data to the Delta table.
+To demonstrate how to create a Databricks Delta table, we will use Spark SQL to query the `flights` table created in the [Azure Data Factory](../automation-orchestration/azure-data-factory.md#load-flight-data-from-dbfs) article, and write it to a Delta table using the following code. Note the `format` property is set to `delta` when saving the data to the Delta table.
 
 ```python
 flights = spark.sql("SELECT * FROM flights")
