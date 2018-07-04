@@ -10,7 +10,7 @@ Structured Streaming treats all the data arriving as an unbounded input table, w
 
 ![Diagram of the conceptual idea behind Structured Streaming](media/structured-streaming-data-stream-concept.png "Structured Streaming diagram")
 
-You, as the developer, can then defines a query on this input table, as if it were a static table. The results of your computations will be written to an output sink. Spark automatically converts this batch-like query to a streaming execution plan. Triggers can be used to control when to update the results. Each time a trigger fires, Spark checks for new data (new row in the input table), and incrementally updates the result.
+You, as the developer, can then define a query on this input table, as if it were a static table. The results of your computations will be written to an output sink. Spark automatically converts this batch-like query to a streaming execution plan. Triggers can be used to control when to update the results. Each time a trigger fires, Spark checks for new data (new row in the input table), and incrementally updates the result.
 
 For a deeper explanation into how Structured Streaming works, and detailed programming guidance see the [Apache Spark Structured Streaming Programming Guide](http://spark.apache.org/docs/latest/structured-streaming-programming-guide.html).
 
