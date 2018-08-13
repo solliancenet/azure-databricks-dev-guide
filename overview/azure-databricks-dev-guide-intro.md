@@ -4,7 +4,7 @@ This guide presents a structured approach for building solutions with [Azure Dat
 
 ## Purpose of this guide
 
-AI and Big Data are driving innovation across all industries, drastically changing the way businesses operate. Many development teams, however, find it challenging to effectively translate their data engineering efforts into business outcomes. The purpose of this guide is to empower developers to unleash to power of data by providing guidance on how to build applications using Azure Databricks that enable the extraction of valuable analytics from their Big Data and achieve the full potential of AI.
+AI and Big Data are driving innovation across all industries, drastically changing the way businesses operate. Many development teams, however, find it challenging to effectively translate their data engineering efforts into business outcomes. The purpose of this guide is to empower developers to unleash the power of data by providing guidance on how to build applications using Azure Databricks that enable the extraction of valuable analytics from their Big Data and achieve the full potential of AI.
 
 The Azure Databricks product documentation provides an excellent, high-level introduction to the topics relating to getting started. This guide goes a step further, aiming to go beyond the scope of the product documentation, and delving deeper into the details of how software and data engineers can actually create and implement solutions using Azure Databricks. Throughout, we will provide guidance around things to consider while developing applications, and the thought processes involved in common Databricks activities, such as ingesting data, performance tuning, integration, and automation and orchestration, among others.
 
