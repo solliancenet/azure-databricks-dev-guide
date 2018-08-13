@@ -28,7 +28,7 @@ By providing an optimized, easy to provision and configure environment, Azure Da
 
 ### Collaboration
 
-Notebooks in Azure Databricks are multi-editable, providing a live and shared means for data engineers and scientists to engage in real-time collaboration. Dashboards and integration with Power BI enable business users to call an existing jobs, passing in parameters.
+Notebooks in Azure Databricks are multi-editable, providing a live and shared means for data engineers and scientists to engage in real-time collaboration. Dashboards and integration with Power BI enable business users to call an existing job, passing in parameters.
 
 ### Easy to use
 
@@ -52,4 +52,4 @@ At the end of each article, a read next link is provided that you can follow to 
 
 ### Next Steps
 
-Read next: [Comparing Azure Databricks to HDInsight Spark](./overview/compare-to-hdinsight-spark.md)
+Read next: [Comparing Azure Databricks to HDInsight Spark](./compare-to-hdinsight-spark.md)
