@@ -16,7 +16,7 @@
 
 # [The Azure Databricks workspace](./workspace/workspace-overview.md)
 
-# [Configuring the cluster](./configuration/README.md)
+# [Configuring the cluster](./configuration/clusters.md)
 
 # [Monitoring & managing the cluster](./monitoring-managing/monitoring-managing.md)
 
