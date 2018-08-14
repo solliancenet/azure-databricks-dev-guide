@@ -33,7 +33,7 @@ Before deciding which ML services to use in training and operationalization, con
 
 - Use the web services provided by Microsoft Cognitive Services.
 - Use the pretrained neural network models provided by Cognitive Toolkit or other pretrained models available from the community.
-- Embed the serialized models provided by Core ML for an iOS apps.
+- Embed the serialized models provided by Core ML for an iOS app.
 
 If a prebuilt model does not fit your data or your scenario, options for building a custom model in Azure include Azure Machine Learning, using Azure Databricks (along with MLlib, MMLSpark, SparklyR, TensorFlow or Cognitive Toolkit), SQL Machine Learning Services and Azure Batch AI. If you decide to use a custom model, you must design a pipeline that includes model training and operationalization.
 
