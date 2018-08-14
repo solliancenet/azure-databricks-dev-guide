@@ -70,7 +70,7 @@ Specifying `%sql` on the first line tells the notebook to use SQL for executing 
 
 #### %sh
 
-You can use `%sh` to execute shell code in your notebook. This magic command includes the `-e` option in order to fail this cell (and subsequently a job or a run all command) if the shell command does not success. By default, `%sh` alone will not fail a job even if the `%sh` command does not completely succeed. Only `%sh -e` will fail if the shell command has a non-zero exit status.
+You can use `%sh` to execute shell code in your notebook. This magic command includes the `-e` option in order to fail this cell (and subsequently a job or a run all command) if the shell command does not succeed. By default, `%sh` alone will not fail a job even if the `%sh` command does not completely succeed. Only `%sh -e` will fail if the shell command has a non-zero exit status.
 
 #### %fs
 
