@@ -129,7 +129,7 @@ dbutils.notebook.exit(json.dumps({
 }))
 ```
 
-To view the return value, you a command similar to the following in the calling notebook:
+To view the return value, you issue a command similar to the following in the calling notebook:
 
 ```python
 import json
