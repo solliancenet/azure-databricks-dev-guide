@@ -196,7 +196,7 @@ To learn more, visit the [widgets documentation](https://docs.azuredatabricks.ne
 
 ## Security
 
-With the Premium tier of Azure Databricks, notebooks can be secured using Azure Active Directory and Role-based access controls (RBAC), which allows teams to more tightly control what actions can be performed by users. As an example, a developer my have permissions to create and edit notebooks, while a business user may only be able to run notebooks. This topic is covered in greater detail in the [User Management](../user-management/user-management.md) article of this guide.
+With the Premium tier of Azure Databricks, notebooks can be secured using Azure Active Directory and Role-based access controls (RBAC), which allows teams to more tightly control what actions can be performed by users. As an example, a developer may have permissions to create and edit notebooks, while a business user may only be able to run notebooks. This topic is covered in greater detail in the [User Management](../user-management/user-management.md) article of this guide.
 
 ## Next steps
 
