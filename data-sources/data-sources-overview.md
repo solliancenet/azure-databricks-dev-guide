@@ -101,10 +101,10 @@ Now, let's step through a real example of this. To complete this you will need a
 1. Open a new notebook in your Azure Databricks workspace, and add the following code to declare and assign variables into the first cell:
 
     ```python
-    accountName = "retaildatasamples"
+    accountName = "databricksdemostore"
     containerName = "data"
     directory = "retaildata/rawdata/"
-    sasToken = "?sv=2017-11-09&ss=b&srt=sco&sp=rl&se=2099-12-31T16:59:59Z&st=2018-06-26T21:42:10Z&spr=https&sig=%2BwsAw0KISuMuqlKpAHcTHHwerXcXhPFpcWPw1rUN9X0%3D"
+    sasToken = "?sv=2019-02-02&ss=b&srt=sco&sp=rl&se=2023-11-08T04:21:20Z&st=2019-11-07T20:21:20Z&spr=https&sig=tOhN6HzwkgZehDZcKmqQAuO2gLOlUvHI7ccTksI4mfY%3D"
     ```
 
 2. Insert another cell, and add the following to perform the mounting operation. This will mount the Blob storage account at "/mnt/retaildata/rawdata/".
